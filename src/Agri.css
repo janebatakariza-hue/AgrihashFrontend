@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.future {
+  width: 100px;
+  color: greenyellow;
+  border: green;
+}
+#navBar {
+  gap: 40px;
+  margin: 20px;
+  color: green;
+}
