@@ -2,12 +2,32 @@
   margin: 0;
   padding: 0;
   /* background: #f5f0e8; */
+  border: none;
+}
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: #f5f0e8;
+  border: none;
+}
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border: none;
 }
 #navLinks {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 50px;
   flex: 1;
+  margin-left: 100px;
 }
 #navLinks a {
   text-decoration: none;
@@ -18,7 +38,10 @@
   transition: transform 0.3s ease;
 }
 #navLinks a:hover,
-#connectBtn:hover , .futureAgriculture:hover {
+#connectBtn:hover,
+.futureAgriculture:hover,
+.connectWallet:hover,
+.GetStarted:hover {
   transform: scale(1.1);
 }
 #navLinks a:first-child {
@@ -50,22 +73,122 @@
   background: #f5f0e8;
   padding: 16px 40px;
   align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.2px solid #6f6f6f;
 }
 .futureAgriculture {
   background-color: #f5f0e8;
   color: #1a3a2a;
   font-family: Arial, sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.12em;
   border: 1.5px solid;
   border-radius: 20px;
   padding: 6px 18px;
   cursor: pointer;
-  margin:20px;
-  transition:transform 0.45s ease;
+  margin: 30px;
+  transition: transform 0.45s ease;
 }
-.farmTable{
-    font-size:50px;
-    color:green;
+.futureAgriculture,
+.farmTable,
+.pars,
+.GetStarted,
+.connectWallet {
+  position: relative;
+  z-index: 1;
+}
+.farmTable {
+  font-size: 64px;
+  font-weight: 900;
+  color: #1a3a1a;
+  font-family: Georgia, serif;
+  line-height: 0.6;
+  margin: 12px;
+}
+.pars {
+  color: #3a3a3a;
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  text-align: center;
+  margin: 0 10px 40px 0;
+}
+.blobTopRight {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 300px;
+  height: 300px;
+  z-index: 0;
+}
+
+.blobBottomRight {
+  position: absolute;
+  bottom: 80px;
+  right: 40px;
+  width: 120px;
+  height: 130px;
+  z-index: 0;
+}
+
+.blobBottomLeft {
+  position: absolute;
+  bottom: 60px;
+  left: 40px;
+  width: 80px;
+  height: 80px;
+  z-index: 0;
+}
+.GetStarted {
+  background-color: #1a3a2a;
+  color: white;
+  border: none;
+  border-radius: 32px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.3s ease;
+}
+
+.GetStarted img {
+  width: 20px;
+  height: 18px;
+  border-radius: 5px;
+}
+.connectWallet {
+  color: #1a3a2a;
+  background-color: white;
+  border: none;
+  border-radius: 32px;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px;
+  transition: transform 0.3s ease;
+}
+.connectWallet img {
+  width: 20px;
+  height: 18px;
+  border-radius: 5px;
+}
+#home {
+  background-color: #f5f0e8;
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
 }
