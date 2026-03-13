@@ -192,3 +192,21 @@ html {
   position: relative;
   overflow: hidden;
 }
+.logo span {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a3a1a;
+  letter-spacing: -0.5px;
+  margin-top:10px;
+}
+.logo img {
+  display: flex;
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+}
+.logo {
+  display: flex;
+  margin-left:-70px;
+}
