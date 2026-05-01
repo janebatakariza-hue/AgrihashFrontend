@@ -1,0 +1,3859 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>MediVex — Health Truth Verifier</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --ink: #050e1d;
+        --ink2: #0b1929;
+        --ink3: #0f2038;
+        --teal: #00c9a7;
+        --teal-a10: rgba(0, 201, 167, 0.1);
+        --teal-a20: rgba(0, 201, 167, 0.2);
+        --teal-a35: rgba(0, 201, 167, 0.35);
+        --amber: #f0a500;
+        --rose: #ff5470;
+        --text: #d8e8f8;
+        --muted: #4e6a8e;
+        --border: rgba(255, 255, 255, 0.06);
+        --border2: rgba(255, 255, 255, 0.11);
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--ink);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.3;
+          transform: scale(0.75);
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinR {
+        to {
+          transform: rotate(-360deg);
+        }
+      }
+      @keyframes floatA {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-18px) rotate(8deg);
+        }
+      }
+      @keyframes floatB {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-14px) rotate(-5deg);
+        }
+      }
+      @keyframes floatC {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-22px);
+        }
+      }
+      @keyframes docDrift {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        33% {
+          transform: translateY(-10px) translateX(5px);
+        }
+        66% {
+          transform: translateY(7px) translateX(-4px);
+        }
+      }
+      @keyframes dnaScroll {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(-50%);
+        }
+      }
+      @keyframes fadeFlow {
+        0%,
+        100% {
+          opacity: 0.1;
+        }
+        50% {
+          opacity: 0.22;
+        }
+      }
+      @keyframes ecgLoop {
+        0% {
+          stroke-dashoffset: 900;
+          opacity: 1;
+        }
+        60% {
+          stroke-dashoffset: 0;
+          opacity: 1;
+        }
+        75% {
+          opacity: 0;
+        }
+        76% {
+          stroke-dashoffset: 900;
+          opacity: 0;
+        }
+        100% {
+          stroke-dashoffset: 900;
+          opacity: 1;
+        }
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes statRise {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes marqueeLeft {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* ── BG SCENE ── */
+      .bg-scene {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+        background: linear-gradient(
+          160deg,
+          #060f1e 0%,
+          #071222 40%,
+          #040d1a 100%
+        );
+      }
+      .bg-scene svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 56px;
+        background: rgba(5, 14, 29, 0.78);
+        backdrop-filter: blur(28px);
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+      .logo-wordmark {
+        font-family: "Fraunces", serif;
+        font-size: 1.35rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -0.03em;
+      }
+      .logo-wordmark span {
+        color: var(--teal);
+      }
+      nav ul {
+        display: flex;
+        gap: 34px;
+        list-style: none;
+      }
+      nav ul a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        transition: color 0.2s;
+        position: relative;
+      }
+      nav ul a::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 1.5px;
+        background: var(--teal);
+        transition: width 0.25s;
+        border-radius: 2px;
+      }
+      nav ul a:hover {
+        color: var(--teal);
+      }
+      nav ul a:hover::after {
+        width: 100%;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        position: relative;
+        z-index: 1;
+        padding: 160px 56px 90px;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 60px;
+        align-items: center;
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(2.7rem, 5.2vw, 4.6rem);
+        font-weight: 900;
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+        color: #fff;
+        margin-bottom: 22px;
+      }
+      h1 em {
+        font-style: italic;
+        color: var(--teal);
+      }
+      .hero-desc {
+        font-size: 1rem;
+        color: var(--muted);
+        line-height: 1.78;
+        margin-bottom: 40px;
+        max-width: 470px;
+        font-weight: 300;
+      }
+      .hero-cta-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        background: var(--teal);
+        color: #050e1d;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 14px 28px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.15);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .btn-primary:hover::before {
+        opacity: 1;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0, 201, 167, 0.4);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 1px solid var(--border2);
+        border-radius: 12px;
+        padding: 14px 28px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-ghost:hover {
+        border-color: var(--teal-a35);
+        color: var(--teal);
+      }
+      .hero-illus {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .hero-illus svg {
+        width: 100%;
+        max-width: 390px;
+        animation: docDrift 10s ease-in-out infinite;
+      }
+
+      /* ── TICKER ── */
+      .ticker-section {
+        position: relative;
+        z-index: 1;
+        padding: 0 0 80px;
+        overflow: hidden;
+      }
+      .ticker-label {
+        text-align: center;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 22px;
+      }
+      .ticker-label span {
+        color: var(--teal);
+        margin: 0 6px;
+      }
+      .ticker-track {
+        position: relative;
+        overflow: hidden;
+      }
+      .ticker-track::before,
+      .ticker-track::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 120px;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .ticker-track::before {
+        left: 0;
+        background: linear-gradient(90deg, var(--ink) 0%, transparent 100%);
+      }
+      .ticker-track::after {
+        right: 0;
+        background: linear-gradient(-90deg, var(--ink) 0%, transparent 100%);
+      }
+      .ticker-belt {
+        display: flex;
+        gap: 14px;
+        animation: marqueeLeft 28s linear infinite;
+        width: max-content;
+      }
+      .ticker-belt:hover {
+        animation-play-state: paused;
+      }
+      .src-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--ink2);
+        border: 1px solid var(--border2);
+        border-radius: 12px;
+        padding: 12px 20px;
+        font-size: 0.84rem;
+        font-weight: 500;
+        color: var(--text);
+        white-space: nowrap;
+        cursor: default;
+        flex-shrink: 0;
+        transition:
+          border-color 0.25s,
+          transform 0.25s,
+          background 0.25s;
+      }
+      .src-card:hover {
+        border-color: var(--teal-a35);
+        background: var(--teal-a10);
+        transform: translateY(-3px);
+      }
+      .src-card .src-name {
+        font-weight: 600;
+      }
+      .src-card .src-desc {
+        font-size: 0.73rem;
+        color: var(--muted);
+        margin-left: 4px;
+      }
+
+      /* ── SECTION ── */
+      .section {
+        position: relative;
+        z-index: 1;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 56px 100px;
+      }
+      .eyebrow {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 14px;
+      }
+      .sec-h2 {
+        font-family: "Fraunces", serif;
+        font-size: 2.4rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: #fff;
+        margin-bottom: 48px;
+        line-height: 1.1;
+      }
+
+      /* ── STATS ── */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 80px;
+      }
+      .stat-card {
+        background: var(--ink2);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 24px;
+        text-align: center;
+        transition:
+          border-color 0.25s,
+          transform 0.3s;
+        animation: statRise 0.6s ease both;
+      }
+      .stat-card:hover {
+        border-color: var(--teal-a20);
+        transform: translateY(-4px);
+      }
+      .stat-card:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .stat-card:nth-child(2) {
+        animation-delay: 0.12s;
+      }
+      .stat-card:nth-child(3) {
+        animation-delay: 0.19s;
+      }
+      .stat-card:nth-child(4) {
+        animation-delay: 0.26s;
+      }
+      .stat-icon-wrap {
+        margin: 0 auto 14px;
+        display: block;
+      }
+      .stat-num {
+        font-family: "Fraunces", serif;
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      .stat-num span {
+        color: var(--teal);
+      }
+      .stat-lbl {
+        font-size: 0.78rem;
+        color: var(--muted);
+        font-weight: 400;
+        margin-top: 5px;
+      }
+
+      /* ── VERIFY CARD ── */
+      .verify-card {
+        background: var(--ink2);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 44px;
+        box-shadow: 0 60px 120px rgba(0, 0, 0, 0.55);
+        transition: border-color 0.3s;
+      }
+      .verify-card:focus-within {
+        border-color: var(--teal-a20);
+      }
+      .card-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 26px;
+      }
+      .card-toplabel {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .scan-status {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-family: "Fira Code", monospace;
+        font-size: 0.7rem;
+        color: var(--teal);
+      }
+      .scan-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--teal);
+        animation: pulse 2s infinite;
+      }
+      .input-wrap {
+        position: relative;
+        margin-bottom: 18px;
+      }
+      textarea {
+        width: 100%;
+        height: 170px;
+        background: var(--ink3);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        padding: 20px 22px;
+        resize: none;
+        outline: none;
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s;
+      }
+      textarea::placeholder {
+        color: var(--muted);
+      }
+      textarea:focus {
+        border-color: rgba(0, 201, 167, 0.4);
+        box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.07);
+      }
+      .char-count {
+        position: absolute;
+        bottom: 13px;
+        right: 15px;
+        font-family: "Fira Code", monospace;
+        font-size: 0.68rem;
+        color: var(--muted);
+      }
+      .samples-label {
+        font-size: 0.72rem;
+        color: var(--muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .chip {
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 6px 13px;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .chip:hover {
+        border-color: var(--teal-a35);
+        color: var(--teal);
+        background: var(--teal-a10);
+        transform: translateY(-1px);
+      }
+      .verify-btn {
+        width: 100%;
+        padding: 17px;
+        background: var(--teal);
+        border: none;
+        border-radius: 12px;
+        color: #050e1d;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        transition: all 0.25s;
+        letter-spacing: 0.02em;
+        position: relative;
+        overflow: hidden;
+      }
+      .verify-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(255, 255, 255, 0.12) 50%,
+          transparent 100%
+        );
+        transform: translateX(-100%);
+        transition: transform 0.5s ease;
+      }
+      .verify-btn:hover::after {
+        transform: translateX(100%);
+      }
+      .verify-btn:hover {
+        background: #00e6bb;
+        box-shadow: 0 0 36px rgba(0, 201, 167, 0.35);
+        transform: translateY(-1px);
+      }
+      .loader-wrap {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        padding: 36px;
+        text-align: center;
+      }
+      .loader-ring {
+        width: 44px;
+        height: 44px;
+        border: 3px solid var(--ink3);
+        border-top-color: var(--teal);
+        border-radius: 50%;
+        animation: spin 0.75s linear infinite;
+      }
+      .loader-text {
+        font-size: 0.83rem;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .loader-step {
+        font-family: "Fira Code", monospace;
+        font-size: 0.68rem;
+        color: var(--teal);
+      }
+      #result-section {
+        margin-top: 26px;
+        display: none;
+      }
+      .result-card {
+        border-radius: 16px;
+        border: 1.5px solid;
+        padding: 28px;
+        animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .result-card.verified {
+        background: rgba(0, 201, 167, 0.05);
+        border-color: rgba(0, 201, 167, 0.28);
+      }
+      .result-card.misleading {
+        background: rgba(240, 165, 0, 0.05);
+        border-color: rgba(240, 165, 0, 0.28);
+      }
+      .result-card.false {
+        background: rgba(255, 84, 112, 0.05);
+        border-color: rgba(255, 84, 112, 0.28);
+      }
+      .r-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .r-icon {
+        flex-shrink: 0;
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .verified .r-icon {
+        background: rgba(0, 201, 167, 0.12);
+      }
+      .misleading .r-icon {
+        background: rgba(240, 165, 0, 0.12);
+      }
+      .false .r-icon {
+        background: rgba(255, 84, 112, 0.12);
+      }
+      .r-hed h3 {
+        font-family: "Fraunces", serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+        letter-spacing: -0.02em;
+      }
+      .verified .r-hed h3 {
+        color: var(--teal);
+      }
+      .misleading .r-hed h3 {
+        color: var(--amber);
+      }
+      .false .r-hed h3 {
+        color: var(--rose);
+      }
+      .r-meta {
+        font-family: "Fira Code", monospace;
+        font-size: 0.68rem;
+        color: var(--muted);
+      }
+      .conf-bar-wrap {
+        margin: 14px 0;
+      }
+      .conf-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.72rem;
+        margin-bottom: 7px;
+      }
+      .conf-labels span:first-child {
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 600;
+      }
+      .verified .conf-labels span:last-child,
+      .misleading .conf-labels span:last-child,
+      .false .conf-labels span:last-child {
+        font-family: "Fira Code", monospace;
+      }
+      .verified .conf-labels span:last-child {
+        color: var(--teal);
+      }
+      .misleading .conf-labels span:last-child {
+        color: var(--amber);
+      }
+      .false .conf-labels span:last-child {
+        color: var(--rose);
+      }
+      .bar-track {
+        height: 4px;
+        background: var(--ink3);
+        border-radius: 100px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 100px;
+        transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .verified .bar-fill {
+        background: var(--teal);
+      }
+      .misleading .bar-fill {
+        background: var(--amber);
+      }
+      .false .bar-fill {
+        background: var(--rose);
+      }
+      .r-body {
+        font-size: 0.88rem;
+        line-height: 1.78;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-bottom: 18px;
+      }
+      .r-sources {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        flex-wrap: wrap;
+      }
+      .src-label {
+        font-size: 0.68rem;
+        color: var(--muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .src-tag {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        padding: 4px 11px;
+        border-radius: 100px;
+        font-size: 0.73rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      /* ── STEPS ── */
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+      .step-card {
+        background: var(--ink2);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 28px;
+        transition:
+          border-color 0.25s,
+          transform 0.3s;
+        animation: statRise 0.5s ease both;
+      }
+      .step-card:hover {
+        border-color: rgba(0, 201, 167, 0.25);
+        transform: translateY(-5px);
+      }
+      .step-num {
+        font-family: "Fira Code", monospace;
+        font-size: 0.68rem;
+        color: var(--teal);
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        margin-bottom: 10px;
+      }
+      .step-card h4 {
+        font-family: "Fraunces", serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .step-card p {
+        font-size: 0.84rem;
+        color: var(--muted);
+        line-height: 1.65;
+        font-weight: 300;
+      }
+      .step-illus {
+        margin-bottom: 20px;
+      }
+
+      /* ── VERDICTS ── */
+      .verdict-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-bottom: 80px;
+      }
+      .v-card {
+        border-radius: 16px;
+        padding: 26px;
+        border: 1px solid;
+        transition: transform 0.3s;
+        animation: statRise 0.5s ease both;
+      }
+      .v-card:hover {
+        transform: translateY(-4px);
+      }
+      .v-card.vc {
+        background: rgba(0, 201, 167, 0.06);
+        border-color: rgba(0, 201, 167, 0.25);
+      }
+      .v-card.vm {
+        background: rgba(240, 165, 0, 0.06);
+        border-color: rgba(240, 165, 0, 0.25);
+      }
+      .v-card.vf {
+        background: rgba(255, 84, 112, 0.06);
+        border-color: rgba(255, 84, 112, 0.25);
+      }
+      .v-icon-wrap {
+        margin-bottom: 14px;
+      }
+      .v-card h4 {
+        font-family: "Fraunces", serif;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 7px;
+      }
+      .vc h4 {
+        color: var(--teal);
+      }
+      .vm h4 {
+        color: var(--amber);
+      }
+      .vf h4 {
+        color: var(--rose);
+      }
+      .v-card p {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.6;
+        font-weight: 300;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        position: relative;
+        z-index: 1;
+        border-top: 1px solid var(--border);
+        padding: 36px 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      footer p {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .footer-links {
+        display: flex;
+        gap: 22px;
+      }
+      .footer-links a {
+        font-size: 0.78rem;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--teal);
+      }
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      @media (max-width: 900px) {
+        nav {
+          padding: 16px 20px;
+        }
+        nav ul {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 120px 20px 60px;
+          text-align: center;
+        }
+        .hero-illus {
+          display: none;
+        }
+        .section {
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+        .steps-grid,
+        .verdict-grid,
+        .stats-row {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          flex-direction: column;
+          padding: 28px 20px;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══ MEDICAL BACKGROUND ══ -->
+    <div class="bg-scene">
+      <svg
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="vig" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="transparent" />
+            <stop offset="100%" stop-color="rgba(4,10,20,.8)" />
+          </radialGradient>
+        </defs>
+
+        <!-- DOCTOR SILHOUETTE -->
+        <g
+          style="animation: docDrift 12s ease-in-out infinite"
+          transform="translate(920,55)"
+        >
+          <path
+            d="M120 200 L60 222 L40 465 L200 465 L180 222 Z"
+            fill="none"
+            stroke="rgba(0,201,167,.12)"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M80 222 L120 295 L160 222"
+            fill="none"
+            stroke="rgba(0,201,167,.16)"
+            stroke-width="1.2"
+          />
+          <path
+            d="M90 207 L120 232 L150 207"
+            fill="none"
+            stroke="rgba(0,201,167,.18)"
+            stroke-width="1.2"
+          />
+          <circle
+            cx="120"
+            cy="162"
+            r="38"
+            fill="none"
+            stroke="rgba(0,201,167,.16)"
+            stroke-width="1.5"
+          />
+          <path
+            d="M86 150 Q120 132 154 150"
+            fill="none"
+            stroke="rgba(0,201,167,.1)"
+            stroke-width="1"
+          />
+          <path
+            d="M60 222 Q38 212 28 242"
+            fill="none"
+            stroke="rgba(0,201,167,.12)"
+            stroke-width="1.2"
+          />
+          <path
+            d="M180 222 Q202 212 212 242"
+            fill="none"
+            stroke="rgba(0,201,167,.12)"
+            stroke-width="1.2"
+          />
+          <path
+            d="M90 242 Q74 262 80 292 Q86 322 100 332"
+            fill="none"
+            stroke="rgba(0,201,167,.22)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M150 242 Q166 262 160 292 Q154 322 140 332"
+            fill="none"
+            stroke="rgba(0,201,167,.22)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <circle
+            cx="120"
+            cy="342"
+            r="14"
+            fill="none"
+            stroke="rgba(0,201,167,.28)"
+            stroke-width="1.5"
+          />
+          <circle
+            cx="120"
+            cy="342"
+            r="7"
+            fill="rgba(0,201,167,.1)"
+            stroke="rgba(0,201,167,.3)"
+            stroke-width="1"
+          />
+          <circle cx="88" cy="245" r="4" fill="rgba(0,201,167,.3)" />
+          <circle cx="152" cy="245" r="4" fill="rgba(0,201,167,.3)" />
+          <rect
+            x="68"
+            y="344"
+            width="52"
+            height="70"
+            rx="4"
+            fill="none"
+            stroke="rgba(0,201,167,.14)"
+            stroke-width="1.2"
+          />
+          <line
+            x1="76"
+            y1="358"
+            x2="112"
+            y2="358"
+            stroke="rgba(0,201,167,.2)"
+            stroke-width="1"
+            stroke-linecap="round"
+          />
+          <line
+            x1="76"
+            y1="368"
+            x2="112"
+            y2="368"
+            stroke="rgba(0,201,167,.14)"
+            stroke-width="1"
+            stroke-linecap="round"
+          />
+          <line
+            x1="76"
+            y1="378"
+            x2="98"
+            y2="378"
+            stroke="rgba(0,201,167,.14)"
+            stroke-width="1"
+            stroke-linecap="round"
+          />
+          <rect
+            x="82"
+            y="344"
+            width="28"
+            height="7"
+            rx="2"
+            fill="rgba(0,201,167,.1)"
+            stroke="rgba(0,201,167,.2)"
+            stroke-width="1"
+          />
+          <rect
+            x="152"
+            y="292"
+            width="4"
+            height="28"
+            rx="2"
+            fill="rgba(0,201,167,.2)"
+          />
+          <rect
+            x="108"
+            y="273"
+            width="24"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.1)"
+            stroke="rgba(0,201,167,.2)"
+            stroke-width="1"
+          />
+        </g>
+
+        <!-- HOSPITAL BUILDING -->
+        <g opacity=".09" style="animation: fadeFlow 8s ease-in-out infinite">
+          <rect
+            x="1188"
+            y="310"
+            width="200"
+            height="490"
+            rx="4"
+            fill="none"
+            stroke="#00c9a7"
+            stroke-width="1"
+          />
+          <rect
+            x="1202"
+            y="328"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.35)"
+          />
+          <rect
+            x="1232"
+            y="328"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.35)"
+          />
+          <rect
+            x="1262"
+            y="328"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.25)"
+          />
+          <rect
+            x="1292"
+            y="328"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.35)"
+          />
+          <rect
+            x="1202"
+            y="356"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.2)"
+          />
+          <rect
+            x="1232"
+            y="356"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.35)"
+          />
+          <rect
+            x="1262"
+            y="356"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.3)"
+          />
+          <rect
+            x="1292"
+            y="356"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.2)"
+          />
+          <rect
+            x="1202"
+            y="384"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.35)"
+          />
+          <rect
+            x="1232"
+            y="384"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.2)"
+          />
+          <rect
+            x="1262"
+            y="384"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.35)"
+          />
+          <rect
+            x="1292"
+            y="384"
+            width="22"
+            height="16"
+            rx="2"
+            fill="rgba(0,201,167,.3)"
+          />
+          <rect
+            x="1258"
+            y="730"
+            width="50"
+            height="70"
+            rx="2"
+            fill="none"
+            stroke="#00c9a7"
+            stroke-width="1"
+          />
+          <rect
+            x="1258"
+            y="428"
+            width="12"
+            height="40"
+            fill="rgba(0,201,167,.6)"
+          />
+          <rect
+            x="1246"
+            y="438"
+            width="36"
+            height="12"
+            fill="rgba(0,201,167,.6)"
+          />
+        </g>
+
+        <!-- ECG LINE -->
+        <g transform="translate(0,590)">
+          <line
+            x1="0"
+            y1="80"
+            x2="1440"
+            y2="80"
+            stroke="rgba(0,201,167,.05)"
+            stroke-width="1"
+          />
+          <path
+            d="M0 80 L100 80 L130 80 L150 30 L175 130 L200 20 L225 140 L255 80 L350 80 L380 80 L400 30 L425 130 L450 20 L475 140 L505 80 L600 80 L630 80 L650 30 L675 130 L700 20 L725 140 L755 80 L850 80 L880 80 L900 30 L925 130 L950 20 L975 140 L1005 80 L1100 80 L1130 80 L1150 30 L1175 130 L1200 20 L1225 140 L1255 80 L1440 80"
+            fill="none"
+            stroke="rgba(0,201,167,.38)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-dasharray="900"
+            stroke-dashoffset="900"
+            style="animation: ecgLoop 4s linear infinite"
+          />
+          <path
+            d="M0 80 L100 80 L130 80 L150 30 L175 130 L200 20 L225 140 L255 80 L350 80 L380 80 L400 30 L425 130 L450 20 L475 140 L505 80 L600 80 L630 80 L650 30 L675 130 L700 20 L725 140 L755 80 L850 80 L880 80 L900 30 L925 130 L950 20 L975 140 L1005 80 L1100 80 L1130 80 L1150 30 L1175 130 L1200 20 L1225 140 L1255 80 L1440 80"
+            fill="none"
+            stroke="rgba(0,201,167,.18)"
+            stroke-width="1"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-dasharray="900"
+            stroke-dashoffset="900"
+            style="animation: ecgLoop 4s linear infinite; animation-delay: 2s"
+          />
+        </g>
+
+        <!-- FLOATING CROSSES -->
+        <g
+          style="animation: floatA 7s ease-in-out infinite"
+          transform="translate(80,140)"
+        >
+          <rect
+            x="-6"
+            y="-18"
+            width="12"
+            height="36"
+            rx="3"
+            fill="rgba(0,201,167,.1)"
+            stroke="rgba(0,201,167,.22)"
+            stroke-width="1"
+          />
+          <rect
+            x="-18"
+            y="-6"
+            width="36"
+            height="12"
+            rx="3"
+            fill="rgba(0,201,167,.1)"
+            stroke="rgba(0,201,167,.22)"
+            stroke-width="1"
+          />
+        </g>
+        <g
+          style="
+            animation: floatB 9s ease-in-out infinite;
+            animation-delay: -3s;
+          "
+          transform="translate(1340,240)"
+        >
+          <rect
+            x="-9"
+            y="-27"
+            width="18"
+            height="54"
+            rx="4"
+            fill="rgba(0,201,167,.08)"
+            stroke="rgba(0,201,167,.18)"
+            stroke-width="1"
+          />
+          <rect
+            x="-27"
+            y="-9"
+            width="54"
+            height="18"
+            rx="4"
+            fill="rgba(0,201,167,.08)"
+            stroke="rgba(0,201,167,.18)"
+            stroke-width="1"
+          />
+        </g>
+        <g
+          style="
+            animation: floatC 11s ease-in-out infinite;
+            animation-delay: -5s;
+          "
+          transform="translate(680,80)"
+        >
+          <rect
+            x="-5"
+            y="-14"
+            width="10"
+            height="28"
+            rx="2"
+            fill="rgba(0,201,167,.08)"
+          />
+          <rect
+            x="-14"
+            y="-5"
+            width="28"
+            height="10"
+            rx="2"
+            fill="rgba(0,201,167,.08)"
+          />
+        </g>
+        <g
+          style="
+            animation: floatA 13s ease-in-out infinite;
+            animation-delay: -7s;
+          "
+          transform="translate(200,700)"
+        >
+          <rect
+            x="-7"
+            y="-20"
+            width="14"
+            height="40"
+            rx="3"
+            fill="rgba(0,201,167,.07)"
+          />
+          <rect
+            x="-20"
+            y="-7"
+            width="40"
+            height="14"
+            rx="3"
+            fill="rgba(0,201,167,.07)"
+          />
+        </g>
+
+        <!-- DNA HELIX LEFT -->
+        <g transform="translate(30,0)" opacity=".22">
+          <g style="animation: dnaScroll 16s linear infinite">
+            <path
+              d="M20 0 Q50 60 20 120 Q-10 180 20 240 Q50 300 20 360 Q-10 420 20 480 Q50 540 20 600 Q-10 660 20 720 Q50 780 20 840 Q-10 900 20 960 Q50 1020 20 1080 Q-10 1140 20 1200 Q50 1260 20 1320 Q-10 1380 20 1440 Q50 1500 20 1560 Q-10 1620 20 1680 Q50 1740 20 1800"
+              fill="none"
+              stroke="rgba(0,201,167,.65)"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M60 0 Q30 60 60 120 Q90 180 60 240 Q30 300 60 360 Q90 420 60 480 Q30 540 60 600 Q90 660 60 720 Q30 780 60 840 Q90 900 60 960 Q30 1020 60 1080 Q90 1140 60 1200 Q30 1260 60 1320 Q90 1380 60 1440 Q30 1500 60 1560 Q90 1620 60 1680 Q30 1740 60 1800"
+              fill="none"
+              stroke="rgba(0,201,167,.45)"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <line
+              x1="20"
+              y1="0"
+              x2="60"
+              y2="0"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="30"
+              x2="54"
+              y2="30"
+              stroke="rgba(0,201,167,.38)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="60"
+              x2="60"
+              y2="60"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="90"
+              x2="54"
+              y2="90"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="120"
+              x2="60"
+              y2="120"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="150"
+              x2="54"
+              y2="150"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="180"
+              x2="60"
+              y2="180"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="210"
+              x2="54"
+              y2="210"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="240"
+              x2="60"
+              y2="240"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="270"
+              x2="54"
+              y2="270"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="300"
+              x2="60"
+              y2="300"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="330"
+              x2="54"
+              y2="330"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="360"
+              x2="60"
+              y2="360"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="390"
+              x2="54"
+              y2="390"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="420"
+              x2="60"
+              y2="420"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="450"
+              x2="54"
+              y2="450"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="480"
+              x2="60"
+              y2="480"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="510"
+              x2="54"
+              y2="510"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="540"
+              x2="60"
+              y2="540"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="570"
+              x2="54"
+              y2="570"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="600"
+              x2="60"
+              y2="600"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="630"
+              x2="54"
+              y2="630"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="660"
+              x2="60"
+              y2="660"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="690"
+              x2="54"
+              y2="690"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="720"
+              x2="60"
+              y2="720"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="750"
+              x2="54"
+              y2="750"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="780"
+              x2="60"
+              y2="780"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="810"
+              x2="54"
+              y2="810"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="840"
+              x2="60"
+              y2="840"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="870"
+              x2="54"
+              y2="870"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <!-- duplicate -->
+            <line
+              x1="20"
+              y1="900"
+              x2="60"
+              y2="900"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="930"
+              x2="54"
+              y2="930"
+              stroke="rgba(0,201,167,.38)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="960"
+              x2="60"
+              y2="960"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="990"
+              x2="54"
+              y2="990"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1020"
+              x2="60"
+              y2="1020"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1050"
+              x2="54"
+              y2="1050"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1080"
+              x2="60"
+              y2="1080"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1110"
+              x2="54"
+              y2="1110"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1140"
+              x2="60"
+              y2="1140"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1170"
+              x2="54"
+              y2="1170"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1200"
+              x2="60"
+              y2="1200"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1230"
+              x2="54"
+              y2="1230"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1260"
+              x2="60"
+              y2="1260"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1290"
+              x2="54"
+              y2="1290"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1320"
+              x2="60"
+              y2="1320"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1350"
+              x2="54"
+              y2="1350"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1380"
+              x2="60"
+              y2="1380"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1410"
+              x2="54"
+              y2="1410"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1440"
+              x2="60"
+              y2="1440"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1470"
+              x2="54"
+              y2="1470"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1500"
+              x2="60"
+              y2="1500"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1530"
+              x2="54"
+              y2="1530"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1560"
+              x2="60"
+              y2="1560"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1590"
+              x2="54"
+              y2="1590"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1620"
+              x2="60"
+              y2="1620"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1650"
+              x2="54"
+              y2="1650"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1680"
+              x2="60"
+              y2="1680"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1710"
+              x2="54"
+              y2="1710"
+              stroke="rgba(0,201,167,.3)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1740"
+              x2="60"
+              y2="1740"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+            <line
+              x1="26"
+              y1="1770"
+              x2="54"
+              y2="1770"
+              stroke="rgba(0,201,167,.4)"
+              stroke-width="1"
+            />
+            <line
+              x1="20"
+              y1="1800"
+              x2="60"
+              y2="1800"
+              stroke="rgba(0,201,167,.5)"
+              stroke-width="1"
+            />
+          </g>
+        </g>
+
+        <!-- FLOATING PILL -->
+        <g
+          style="
+            animation: floatB 14s ease-in-out infinite;
+            animation-delay: -6s;
+          "
+          transform="translate(1350,720)"
+        >
+          <rect
+            x="-30"
+            y="-12"
+            width="60"
+            height="24"
+            rx="12"
+            fill="none"
+            stroke="rgba(0,201,167,.18)"
+            stroke-width="1.5"
+          />
+          <rect
+            x="-30"
+            y="-12"
+            width="30"
+            height="24"
+            rx="12 0 0 12"
+            fill="rgba(0,201,167,.09)"
+          />
+          <line
+            x1="0"
+            y1="-12"
+            x2="0"
+            y2="12"
+            stroke="rgba(0,201,167,.22)"
+            stroke-width="1"
+          />
+        </g>
+
+        <!-- ORBIT RINGS -->
+        <g transform="translate(720,450)">
+          <circle
+            cx="0"
+            cy="0"
+            r="220"
+            fill="none"
+            stroke="rgba(0,201,167,.04)"
+            stroke-width="1"
+            stroke-dasharray="8 16"
+            style="transform-origin: 0 0; animation: spin 40s linear infinite"
+          />
+          <circle
+            cx="0"
+            cy="0"
+            r="160"
+            fill="none"
+            stroke="rgba(0,201,167,.03)"
+            stroke-width="1"
+            stroke-dasharray="4 12"
+            style="transform-origin: 0 0; animation: spinR 28s linear infinite"
+          />
+        </g>
+
+        <!-- DATA DOTS -->
+        <circle
+          cx="400"
+          cy="120"
+          r="2.5"
+          fill="rgba(0,201,167,.35)"
+          style="animation: pulse 3s infinite"
+        />
+        <circle
+          cx="600"
+          cy="200"
+          r="2"
+          fill="rgba(0,201,167,.25)"
+          style="animation: pulse 3.5s infinite; animation-delay: -0.8s"
+        />
+        <circle
+          cx="1050"
+          cy="160"
+          r="3"
+          fill="rgba(0,201,167,.3)"
+          style="animation: pulse 2.8s infinite; animation-delay: -0.4s"
+        />
+        <circle
+          cx="850"
+          cy="500"
+          r="2"
+          fill="rgba(0,201,167,.2)"
+          style="animation: pulse 4s infinite; animation-delay: -1.2s"
+        />
+        <circle
+          cx="300"
+          cy="600"
+          r="2.5"
+          fill="rgba(0,201,167,.25)"
+          style="animation: pulse 3.2s infinite; animation-delay: -2s"
+        />
+        <circle
+          cx="1250"
+          cy="580"
+          r="2"
+          fill="rgba(0,201,167,.2)"
+          style="animation: pulse 3.8s infinite; animation-delay: -0.6s"
+        />
+
+        <rect width="1440" height="900" fill="url(#vig)" />
+        <rect width="1440" height="130" fill="rgba(5,14,29,.65)" />
+      </svg>
+    </div>
+
+    <!-- ══ NAV ══ -->
+    <nav>
+      <div class="nav-logo">
+        <svg viewBox="0 0 36 36" fill="none" style="width: 36px; height: 36px">
+          <rect
+            width="36"
+            height="36"
+            rx="9"
+            fill="rgba(0,201,167,.14)"
+            stroke="rgba(0,201,167,.35)"
+            stroke-width="1"
+          />
+          <path
+            d="M18 6 L27 10 L27 20 Q27 27 18 30 Q9 27 9 20 L9 10 Z"
+            fill="none"
+            stroke="#00c9a7"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <line
+            x1="18"
+            y1="13"
+            x2="18"
+            y2="23"
+            stroke="#00c9a7"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1="13"
+            y1="18"
+            x2="23"
+            y2="18"
+            stroke="#00c9a7"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <circle cx="18" cy="13" r="1.3" fill="#00c9a7" />
+          <circle cx="18" cy="23" r="1.3" fill="#00c9a7" />
+          <circle cx="13" cy="18" r="1.3" fill="#00c9a7" />
+          <circle cx="23" cy="18" r="1.3" fill="#00c9a7" />
+        </svg>
+        <div class="logo-wordmark">Medi<span>Vex</span></div>
+      </div>
+      <!-- nav links RIGHT -->
+      <ul>
+        <li><a href="#verify">Verify</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#verdicts">Verdicts</a></li>
+      </ul>
+    </nav>
+
+    <!-- ══ HERO ══ -->
+    <section class="hero" id="top">
+      <div>
+        <h1>Is that health claim<br /><em>actually</em> true?</h1>
+        <p class="hero-desc">
+          MediVex cross-references any health statement against trusted global
+          medical authorities — WHO, CDC, NIH & more — giving you a clear,
+          plain-language verdict in seconds.
+        </p>
+        <div class="hero-cta-row">
+          <button
+            class="btn-primary"
+            onclick="
+              document
+                .getElementById('verify')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+            Start verifying
+          </button>
+          <button
+            class="btn-ghost"
+            onclick="
+              document
+                .getElementById('how')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            See how it works
+          </button>
+        </div>
+      </div>
+      <div class="hero-illus">
+        <svg
+          viewBox="0 0 390 390"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <radialGradient id="hg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(0,201,167,.2)" />
+              <stop offset="100%" stop-color="rgba(0,201,167,.0)" />
+            </radialGradient>
+          </defs>
+          <circle cx="195" cy="195" r="175" fill="url(#hg)" />
+          <circle
+            cx="195"
+            cy="195"
+            r="135"
+            fill="none"
+            stroke="rgba(0,201,167,.1)"
+            stroke-width="1"
+          />
+          <circle
+            cx="195"
+            cy="195"
+            r="105"
+            fill="none"
+            stroke="rgba(0,201,167,.15)"
+            stroke-width="1"
+          />
+          <circle
+            cx="195"
+            cy="195"
+            r="75"
+            fill="rgba(0,201,167,.06)"
+            stroke="rgba(0,201,167,.25)"
+            stroke-width="1.5"
+          />
+          <g
+            style="
+              transform-origin: 195px 195px;
+              animation: spin 20s linear infinite;
+            "
+          >
+            <circle
+              cx="195"
+              cy="195"
+              r="150"
+              fill="none"
+              stroke="rgba(0,201,167,.12)"
+              stroke-width="1"
+              stroke-dasharray="5 15"
+            />
+          </g>
+          <g
+            style="
+              transform-origin: 195px 195px;
+              animation: spinR 14s linear infinite;
+            "
+          >
+            <circle
+              cx="195"
+              cy="195"
+              r="118"
+              fill="none"
+              stroke="rgba(0,201,167,.08)"
+              stroke-width="1"
+              stroke-dasharray="3 20"
+            />
+          </g>
+          <rect
+            x="188"
+            y="170"
+            width="14"
+            height="50"
+            rx="4"
+            fill="rgba(0,201,167,.65)"
+          />
+          <rect
+            x="170"
+            y="188"
+            width="50"
+            height="14"
+            rx="4"
+            fill="rgba(0,201,167,.65)"
+          />
+          <g
+            style="
+              transform-origin: 195px 195px;
+              animation: spin 9s linear infinite;
+            "
+          >
+            <circle cx="195" cy="62" r="7" fill="#00c9a7" />
+            <circle cx="195" cy="62" r="12" fill="rgba(0,201,167,.2)" />
+          </g>
+          <g
+            style="
+              transform-origin: 195px 195px;
+              animation: spin 9s linear infinite reverse;
+              animation-delay: -2s;
+            "
+          >
+            <circle cx="328" cy="195" r="5" fill="rgba(0,201,167,.8)" />
+            <circle cx="328" cy="195" r="9" fill="rgba(0,201,167,.15)" />
+          </g>
+          <g
+            style="
+              transform-origin: 195px 195px;
+              animation: spin 12s linear infinite;
+              animation-delay: -4s;
+            "
+          >
+            <circle cx="195" cy="328" r="6" fill="rgba(0,201,167,.6)" />
+            <circle cx="195" cy="328" r="10" fill="rgba(0,201,167,.12)" />
+          </g>
+          <g
+            style="
+              transform-origin: 195px 195px;
+              animation: spinR 16s linear infinite;
+              animation-delay: -6s;
+            "
+          >
+            <circle cx="62" cy="195" r="4" fill="rgba(0,201,167,.5)" />
+            <circle cx="62" cy="195" r="8" fill="rgba(0,201,167,.1)" />
+          </g>
+          <g>
+            <rect
+              x="20"
+              y="22"
+              width="92"
+              height="44"
+              rx="10"
+              fill="rgba(0,201,167,.12)"
+              stroke="rgba(0,201,167,.28)"
+              stroke-width="1"
+            />
+            <text
+              x="35"
+              y="39"
+              font-family="'Fira Code',monospace"
+              font-size="8"
+              fill="#00c9a7"
+            >
+              VERIFIED
+            </text>
+            <text
+              x="35"
+              y="53"
+              font-family="'DM Sans',sans-serif"
+              font-size="10"
+              fill="rgba(220,230,245,.65)"
+            >
+              WHO Data
+            </text>
+            <circle cx="27" cy="35" r="4" fill="rgba(0,201,167,.35)" />
+            <path
+              d="M25 35 L27 37.5 L30 32"
+              stroke="#00c9a7"
+              stroke-width="1.2"
+              fill="none"
+              stroke-linecap="round"
+            />
+            <line
+              x1="112"
+              y1="44"
+              x2="154"
+              y2="124"
+              stroke="rgba(0,201,167,.18)"
+              stroke-width="1"
+              stroke-dasharray="3 5"
+            />
+          </g>
+          <g>
+            <rect
+              x="272"
+              y="318"
+              width="92"
+              height="44"
+              rx="10"
+              fill="rgba(255,84,112,.1)"
+              stroke="rgba(255,84,112,.25)"
+              stroke-width="1"
+            />
+            <text
+              x="287"
+              y="335"
+              font-family="'Fira Code',monospace"
+              font-size="8"
+              fill="#ff5470"
+            >
+              FALSE
+            </text>
+            <text
+              x="287"
+              y="349"
+              font-family="'DM Sans',sans-serif"
+              font-size="10"
+              fill="rgba(220,230,245,.6)"
+            >
+              Debunked
+            </text>
+            <circle cx="278" cy="331" r="4" fill="rgba(255,84,112,.3)" />
+            <path
+              d="M276.5 329.5 L279.5 332.5 M279.5 329.5 L276.5 332.5"
+              stroke="#ff5470"
+              stroke-width="1.3"
+              stroke-linecap="round"
+            />
+            <line
+              x1="272"
+              y1="328"
+              x2="232"
+              y2="264"
+              stroke="rgba(255,84,112,.16)"
+              stroke-width="1"
+              stroke-dasharray="3 5"
+            />
+          </g>
+          <g>
+            <rect
+              x="272"
+              y="22"
+              width="98"
+              height="44"
+              rx="10"
+              fill="rgba(240,165,0,.1)"
+              stroke="rgba(240,165,0,.25)"
+              stroke-width="1"
+            />
+            <text
+              x="287"
+              y="39"
+              font-family="'Fira Code',monospace"
+              font-size="8"
+              fill="#f0a500"
+            >
+              MISLEADING
+            </text>
+            <text
+              x="287"
+              y="53"
+              font-family="'DM Sans',sans-serif"
+              font-size="10"
+              fill="rgba(220,230,245,.6)"
+            >
+              Context needed
+            </text>
+            <circle cx="278" cy="35" r="4" fill="rgba(240,165,0,.3)" />
+            <text
+              x="275.5"
+              y="38.5"
+              font-family="'DM Sans',sans-serif"
+              font-size="10"
+              font-weight="700"
+              fill="#f0a500"
+            >
+              !
+            </text>
+            <line
+              x1="272"
+              y1="44"
+              x2="232"
+              y2="122"
+              stroke="rgba(240,165,0,.16)"
+              stroke-width="1"
+              stroke-dasharray="3 5"
+            />
+          </g>
+          <g>
+            <rect
+              x="16"
+              y="318"
+              width="92"
+              height="44"
+              rx="10"
+              fill="rgba(0,201,167,.08)"
+              stroke="rgba(0,201,167,.2)"
+              stroke-width="1"
+            />
+            <text
+              x="31"
+              y="335"
+              font-family="'Fira Code',monospace"
+              font-size="8"
+              fill="#00c9a7"
+            >
+              SOURCES
+            </text>
+            <text
+              x="31"
+              y="349"
+              font-family="'DM Sans',sans-serif"
+              font-size="10"
+              fill="rgba(220,230,245,.6)"
+            >
+              WHO · CDC
+            </text>
+            <circle cx="22" cy="331" r="4" fill="rgba(0,201,167,.25)" />
+            <line
+              x1="108"
+              y1="328"
+              x2="157"
+              y2="264"
+              stroke="rgba(0,201,167,.14)"
+              stroke-width="1"
+              stroke-dasharray="3 5"
+            />
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ══ TICKER ══ -->
+    <div class="ticker-section">
+      <p class="ticker-label">
+        Verified against trusted sources <span>·</span> hover to pause
+      </p>
+      <div class="ticker-track">
+        <div class="ticker-belt">
+          <!-- A -->
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+              />
+              <ellipse
+                cx="12"
+                cy="12"
+                rx="4"
+                ry="10"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+              />
+              <line
+                x1="2"
+                y1="12"
+                x2="22"
+                y2="12"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+              />
+              <line
+                x1="4.5"
+                y1="7"
+                x2="19.5"
+                y2="7"
+                stroke="#00c9a7"
+                stroke-width=".9"
+              />
+              <line
+                x1="4.5"
+                y1="17"
+                x2="19.5"
+                y2="17"
+                stroke="#00c9a7"
+                stroke-width=".9"
+              /></svg
+            ><span class="src-name">World Health Organization</span
+            ><span class="src-desc">· WHO</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3 L21 7 L21 13 Q21 19 12 22 Q3 19 3 13 L3 7 Z"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9 12 L11 14 L15 10"
+                stroke="#00c9a7"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg
+            ><span class="src-name">Centers for Disease Control</span
+            ><span class="src-desc">· CDC</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect
+                x="3"
+                y="4"
+                width="18"
+                height="16"
+                rx="3"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+              />
+              <line
+                x1="7.5"
+                y1="9"
+                x2="16.5"
+                y2="9"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="7.5"
+                y1="12"
+                x2="16.5"
+                y2="12"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="7.5"
+                y1="15"
+                x2="13"
+                y2="15"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              /></svg
+            ><span class="src-name">National Institutes of Health</span
+            ><span class="src-desc">· NIH</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+              />
+              <path
+                d="M12 7 C8 7 6 10 6 12 C6 14 8 17 12 17 C16 17 18 14 18 12"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="2.5"
+                fill="none"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+              /></svg
+            ><span class="src-name">UNICEF</span
+            ><span class="src-desc">· Children's Fund</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3 C8 3 5 6 5 10 C5 15 12 21 12 21 C12 21 19 15 19 10 C19 6 16 3 12 3 Z"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linejoin="round"
+              />
+              <circle
+                cx="12"
+                cy="10"
+                r="3"
+                fill="none"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+              /></svg
+            ><span class="src-name">Africa CDC</span
+            ><span class="src-desc">· Regional data</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+              />
+              <path
+                d="M4 20 C4 16 7 14 12 14 C17 14 20 16 20 20"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linecap="round"
+              /></svg
+            ><span class="src-name">Medical Experts</span
+            ><span class="src-desc">· Peer reviewed</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 12 L4 8 L9 4 M4 8 L20 8 M15 20 L20 16 L15 12 M20 16 L4 16"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg
+            ><span class="src-name">Clinical Databases</span
+            ><span class="src-desc">· Evidence-based</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 9 L12 4 L21 9 L21 15 L12 20 L3 15 Z"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linejoin="round"
+              />
+              <line
+                x1="12"
+                y1="4"
+                x2="12"
+                y2="20"
+                stroke="#00c9a7"
+                stroke-width="1"
+                stroke-dasharray="2 2"
+              />
+              <line
+                x1="3"
+                y1="12"
+                x2="21"
+                y2="12"
+                stroke="#00c9a7"
+                stroke-width="1"
+                stroke-dasharray="2 2"
+              /></svg
+            ><span class="src-name">Global Health Data</span
+            ><span class="src-desc">· International</span>
+          </div>
+          <!-- B (duplicate) -->
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+              />
+              <ellipse
+                cx="12"
+                cy="12"
+                rx="4"
+                ry="10"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+              />
+              <line
+                x1="2"
+                y1="12"
+                x2="22"
+                y2="12"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+              />
+              <line
+                x1="4.5"
+                y1="7"
+                x2="19.5"
+                y2="7"
+                stroke="#00c9a7"
+                stroke-width=".9"
+              />
+              <line
+                x1="4.5"
+                y1="17"
+                x2="19.5"
+                y2="17"
+                stroke="#00c9a7"
+                stroke-width=".9"
+              /></svg
+            ><span class="src-name">World Health Organization</span
+            ><span class="src-desc">· WHO</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3 L21 7 L21 13 Q21 19 12 22 Q3 19 3 13 L3 7 Z"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9 12 L11 14 L15 10"
+                stroke="#00c9a7"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg
+            ><span class="src-name">Centers for Disease Control</span
+            ><span class="src-desc">· CDC</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect
+                x="3"
+                y="4"
+                width="18"
+                height="16"
+                rx="3"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+              />
+              <line
+                x1="7.5"
+                y1="9"
+                x2="16.5"
+                y2="9"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="7.5"
+                y1="12"
+                x2="16.5"
+                y2="12"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="7.5"
+                y1="15"
+                x2="13"
+                y2="15"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              /></svg
+            ><span class="src-name">National Institutes of Health</span
+            ><span class="src-desc">· NIH</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+                stroke="#00c9a7"
+                stroke-width="1.4"
+              />
+              <path
+                d="M12 7 C8 7 6 10 6 12 C6 14 8 17 12 17 C16 17 18 14 18 12"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="2.5"
+                fill="none"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+              /></svg
+            ><span class="src-name">UNICEF</span
+            ><span class="src-desc">· Children's Fund</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3 C8 3 5 6 5 10 C5 15 12 21 12 21 C12 21 19 15 19 10 C19 6 16 3 12 3 Z"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linejoin="round"
+              />
+              <circle
+                cx="12"
+                cy="10"
+                r="3"
+                fill="none"
+                stroke="#00c9a7"
+                stroke-width="1.2"
+              /></svg
+            ><span class="src-name">Africa CDC</span
+            ><span class="src-desc">· Regional data</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+              />
+              <path
+                d="M4 20 C4 16 7 14 12 14 C17 14 20 16 20 20"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linecap="round"
+              /></svg
+            ><span class="src-name">Medical Experts</span
+            ><span class="src-desc">· Peer reviewed</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 12 L4 8 L9 4 M4 8 L20 8 M15 20 L20 16 L15 12 M20 16 L4 16"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg
+            ><span class="src-name">Clinical Databases</span
+            ><span class="src-desc">· Evidence-based</span>
+          </div>
+          <div class="src-card">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 9 L12 4 L21 9 L21 15 L12 20 L3 15 Z"
+                stroke="#00c9a7"
+                stroke-width="1.3"
+                stroke-linejoin="round"
+              />
+              <line
+                x1="12"
+                y1="4"
+                x2="12"
+                y2="20"
+                stroke="#00c9a7"
+                stroke-width="1"
+                stroke-dasharray="2 2"
+              />
+              <line
+                x1="3"
+                y1="12"
+                x2="21"
+                y2="12"
+                stroke="#00c9a7"
+                stroke-width="1"
+                stroke-dasharray="2 2"
+              /></svg
+            ><span class="src-name">Global Health Data</span
+            ><span class="src-desc">· International</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ STATS ══ -->
+    <div class="section">
+      <div class="stats-row">
+        <div class="stat-card">
+          <svg
+            class="stat-icon-wrap"
+            width="36"
+            height="36"
+            viewBox="0 0 36 36"
+            fill="none"
+          >
+            <circle
+              cx="18"
+              cy="18"
+              r="16"
+              fill="rgba(0,201,167,.1)"
+              stroke="rgba(0,201,167,.25)"
+              stroke-width="1"
+            />
+            <path
+              d="M11 18 L15 22 L25 12"
+              stroke="#00c9a7"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <div class="stat-num">20<span>+</span></div>
+          <div class="stat-lbl">Claims in database</div>
+        </div>
+        <div class="stat-card">
+          <svg
+            class="stat-icon-wrap"
+            width="36"
+            height="36"
+            viewBox="0 0 36 36"
+            fill="none"
+          >
+            <circle
+              cx="18"
+              cy="18"
+              r="16"
+              fill="rgba(0,201,167,.1)"
+              stroke="rgba(0,201,167,.25)"
+              stroke-width="1"
+              style="
+                transform-origin: 18px 18px;
+                animation: spin 10s linear infinite;
+              "
+            />
+            <circle
+              cx="18"
+              cy="18"
+              r="9"
+              fill="none"
+              stroke="#00c9a7"
+              stroke-width="1.2"
+            />
+            <ellipse
+              cx="18"
+              cy="18"
+              rx="4"
+              ry="9"
+              fill="none"
+              stroke="#00c9a7"
+              stroke-width="1.1"
+            />
+            <line
+              x1="9"
+              y1="18"
+              x2="27"
+              y2="18"
+              stroke="#00c9a7"
+              stroke-width="1.1"
+            />
+          </svg>
+          <div class="stat-num">4<span>+</span></div>
+          <div class="stat-lbl">Global health sources</div>
+        </div>
+        <div class="stat-card">
+          <svg
+            class="stat-icon-wrap"
+            width="36"
+            height="36"
+            viewBox="0 0 36 36"
+            fill="none"
+          >
+            <circle
+              cx="18"
+              cy="18"
+              r="16"
+              fill="rgba(0,201,167,.1)"
+              stroke="rgba(0,201,167,.25)"
+              stroke-width="1"
+            />
+            <rect
+              x="10"
+              y="22"
+              width="4"
+              height="8"
+              rx="1"
+              fill="#00c9a7"
+              opacity=".6"
+            />
+            <rect x="16" y="14" width="4" height="16" rx="1" fill="#00c9a7" />
+            <rect
+              x="22"
+              y="18"
+              width="4"
+              height="12"
+              rx="1"
+              fill="#00c9a7"
+              opacity=".75"
+            />
+          </svg>
+          <div class="stat-num">3</div>
+          <div class="stat-lbl">Verdict categories</div>
+        </div>
+        <div class="stat-card">
+          <svg
+            class="stat-icon-wrap"
+            width="36"
+            height="36"
+            viewBox="0 0 36 36"
+            fill="none"
+          >
+            <circle
+              cx="18"
+              cy="18"
+              r="16"
+              fill="rgba(0,201,167,.1)"
+              stroke="rgba(0,201,167,.25)"
+              stroke-width="1"
+            />
+            <circle cx="18" cy="18" r="4" fill="#00c9a7" />
+            <line
+              x1="18"
+              y1="6"
+              x2="18"
+              y2="10"
+              stroke="#00c9a7"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="18"
+              y1="26"
+              x2="18"
+              y2="30"
+              stroke="#00c9a7"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="6"
+              y1="18"
+              x2="10"
+              y2="18"
+              stroke="#00c9a7"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="26"
+              y1="18"
+              x2="30"
+              y2="18"
+              stroke="#00c9a7"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
+          <div class="stat-num">&lt;2s</div>
+          <div class="stat-lbl">Response time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VERIFY ══ -->
+    <div class="section" id="verify">
+      <div class="eyebrow">The checker</div>
+      <div class="sec-h2" style="margin-bottom: 32px">
+        Verify a health claim
+      </div>
+      <div class="verify-card">
+        <div class="card-topbar">
+          <span class="card-toplabel">Enter claim below</span>
+          <span class="scan-status"
+            ><span class="scan-dot"></span>System ready</span
+          >
+        </div>
+        <div class="input-wrap">
+          <textarea
+            id="claim-input"
+            placeholder="Paste or type any health claim here…&#10;&#10;e.g. 'Vaccines cause autism' or 'Malaria can spread through hugging'"
+            maxlength="800"
+          ></textarea>
+          <span class="char-count" id="char-count">0 / 800</span>
+        </div>
+        <div class="samples-label">Try a sample claim</div>
+        <div class="chips">
+          <button class="chip" onclick="fill(this)">
+            Vaccines cause autism
+          </button>
+          <button class="chip" onclick="fill(this)">
+            Malaria cured by drinking hot water
+          </button>
+          <button class="chip" onclick="fill(this)">
+            HIV spreads through hugging
+          </button>
+          <button class="chip" onclick="fill(this)">
+            Vitamin C prevents COVID-19
+          </button>
+          <button class="chip" onclick="fill(this)">
+            COVID-19 vaccines are safe and effective
+          </button>
+          <button class="chip" onclick="fill(this)">
+            Drinking bleach cures COVID-19
+          </button>
+          <button class="chip" onclick="fill(this)">
+            Malaria is caused by a mosquito-borne parasite
+          </button>
+          <button class="chip" onclick="fill(this)">
+            Antiretroviral therapy controls HIV
+          </button>
+        </div>
+        <button class="verify-btn" onclick="verify()">
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          Verify this claim
+        </button>
+        <div class="loader-wrap" id="loader">
+          <div class="loader-ring"></div>
+          <div class="loader-text">Analysing claim…</div>
+          <div class="loader-step" id="loader-step">
+            Scanning keyword database…
+          </div>
+        </div>
+        <div id="result-section"></div>
+      </div>
+    </div>
+
+    <!-- ══ HOW IT WORKS ══ -->
+    <div class="section" id="how">
+      <div class="eyebrow">The process</div>
+      <div class="sec-h2">How MediVex works</div>
+      <div class="steps-grid">
+        <div class="step-card" style="animation-delay: 0.08s">
+          <div class="step-illus">
+            <svg
+              viewBox="0 0 140 90"
+              fill="none"
+              style="width: 100%; max-width: 160px"
+            >
+              <rect
+                x="20"
+                y="8"
+                width="100"
+                height="74"
+                rx="8"
+                fill="rgba(0,201,167,.07)"
+                stroke="rgba(0,201,167,.22)"
+                stroke-width="1.2"
+              />
+              <line
+                x1="34"
+                y1="26"
+                x2="106"
+                y2="26"
+                stroke="rgba(0,201,167,.4)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="34"
+                y1="36"
+                x2="106"
+                y2="36"
+                stroke="rgba(0,201,167,.22)"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="34"
+                y1="46"
+                x2="85"
+                y2="46"
+                stroke="rgba(0,201,167,.22)"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
+              <rect
+                x="86"
+                y="41"
+                width="2.5"
+                height="11"
+                rx="1"
+                fill="#00c9a7"
+                style="animation: pulse 1.2s ease infinite"
+              />
+              <circle
+                cx="104"
+                cy="71"
+                r="10"
+                fill="rgba(0,201,167,.14)"
+                stroke="rgba(0,201,167,.3)"
+                stroke-width="1"
+              />
+              <path d="M101 74 L103 70 L107 74 Z" fill="#00c9a7" opacity=".7" />
+            </svg>
+          </div>
+          <div class="step-num">STEP 01</div>
+          <h4>Submit a claim</h4>
+          <p>
+            Type or paste any health statement you've seen online or heard from
+            someone around you.
+          </p>
+        </div>
+        <div class="step-card" style="animation-delay: 0.16s">
+          <div class="step-illus">
+            <svg
+              viewBox="0 0 140 90"
+              fill="none"
+              style="width: 100%; max-width: 160px"
+            >
+              <circle
+                cx="40"
+                cy="28"
+                r="18"
+                fill="rgba(0,201,167,.09)"
+                stroke="rgba(0,201,167,.22)"
+                stroke-width="1"
+              />
+              <text
+                x="40"
+                y="32"
+                text-anchor="middle"
+                font-family="'Fira Code',monospace"
+                font-size="8"
+                fill="#00c9a7"
+              >
+                WHO
+              </text>
+              <circle
+                cx="100"
+                cy="28"
+                r="18"
+                fill="rgba(0,201,167,.09)"
+                stroke="rgba(0,201,167,.22)"
+                stroke-width="1"
+              />
+              <text
+                x="100"
+                y="32"
+                text-anchor="middle"
+                font-family="'Fira Code',monospace"
+                font-size="8"
+                fill="#00c9a7"
+              >
+                CDC
+              </text>
+              <circle
+                cx="70"
+                cy="68"
+                r="18"
+                fill="rgba(0,201,167,.09)"
+                stroke="rgba(0,201,167,.22)"
+                stroke-width="1"
+              />
+              <text
+                x="70"
+                y="72"
+                text-anchor="middle"
+                font-family="'Fira Code',monospace"
+                font-size="8"
+                fill="#00c9a7"
+              >
+                NIH
+              </text>
+              <line
+                x1="57"
+                y1="34"
+                x2="83"
+                y2="34"
+                stroke="rgba(0,201,167,.28)"
+                stroke-width="1"
+                stroke-dasharray="3 3"
+              />
+              <line
+                x1="51"
+                y1="42"
+                x2="63"
+                y2="53"
+                stroke="rgba(0,201,167,.28)"
+                stroke-width="1"
+                stroke-dasharray="3 3"
+              />
+              <line
+                x1="89"
+                y1="42"
+                x2="77"
+                y2="53"
+                stroke="rgba(0,201,167,.28)"
+                stroke-width="1"
+                stroke-dasharray="3 3"
+              />
+              <circle
+                cx="70"
+                cy="36"
+                r="5"
+                fill="#00c9a7"
+                opacity=".85"
+                style="animation: pulse 1.5s ease infinite"
+              />
+            </svg>
+          </div>
+          <div class="step-num">STEP 02</div>
+          <h4>Keyword analysis</h4>
+          <p>
+            MediVex scans your text against a curated database built from WHO,
+            CDC, NIH and UNICEF guidelines.
+          </p>
+        </div>
+        <div class="step-card" style="animation-delay: 0.24s">
+          <div class="step-illus">
+            <svg
+              viewBox="0 0 140 90"
+              fill="none"
+              style="width: 100%; max-width: 160px"
+            >
+              <rect
+                x="15"
+                y="10"
+                width="110"
+                height="70"
+                rx="8"
+                fill="rgba(0,201,167,.07)"
+                stroke="rgba(0,201,167,.18)"
+                stroke-width="1.2"
+              />
+              <rect
+                x="26"
+                y="24"
+                width="88"
+                height="13"
+                rx="4"
+                fill="rgba(0,201,167,.1)"
+                stroke="rgba(0,201,167,.28)"
+                stroke-width="1"
+              />
+              
+              <rect
+                x="26"
+                y="24"
+                width="66"
+                height="13"
+                rx="4"
+                fill="rgba(0,201,167,.32)"
+              />
+              <text
+                x="30"
+                y="34"
+                font-family="'Fira Code',monospace"
+                font-size="7"
+                fill="#050e1d"
+                font-weight="500"
+              >
+                VERIFIED 81%
+              </text>
+              <text
+                x="70"
+                y="60"
+                text-anchor="middle"
+                font-family="'Fraunces',serif"
+                font-size="24"
+                font-weight="900"
+                fill="#00c9a7"
+              >
+                ✓
+              </text>
+              <rect
+                x="26"
+                y="68"
+                width="36"
+                height="8"
+                rx="3"
+                fill="rgba(0,201,167,.14)"
+                stroke="rgba(0,201,167,.2)"
+                stroke-width=".8"
+              />
+              <text
+                x="44"
+                y="74"
+                text-anchor="middle"
+                font-family="'Fira Code',monospace"
+                font-size="6"
+                fill="#00c9a7"
+              >
+                WHO
+              </text>
+              <rect
+                x="66"
+                y="68"
+                width="36"
+                height="8"
+                rx="3"
+                fill="rgba(0,201,167,.14)"
+                stroke="rgba(0,201,167,.2)"
+                stroke-width=".8"
+              />
+              <text
+                x="84"
+                y="74"
+                text-anchor="middle"
+                font-family="'Fira Code',monospace"
+                font-size="6"
+                fill="#00c9a7"
+              >
+                CDC
+              </text>
+            </svg>
+          </div>
+          <div class="step-num">STEP 03</div>
+          <h4>Clear verdict</h4>
+          <p>
+            Get an instant plain-language result — Verified, Misleading, or
+            False — with an explanation and sources.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ VERDICTS ══ -->
+    <div class="section" id="verdicts">
+      <div class="eyebrow">Understanding results</div>
+      <div class="sec-h2">What each verdict means</div>
+      <div class="verdict-grid">
+        <div class="v-card vc" style="animation-delay: 0.06s">
+          <div class="v-icon-wrap">
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+              <circle
+                cx="26"
+                cy="26"
+                r="24"
+                fill="rgba(0,201,167,.12)"
+                stroke="rgba(0,201,167,.35)"
+                stroke-width="1.5"
+                style="
+                  transform-origin: 26px 26px;
+                  animation: spin 12s linear infinite;
+                "
+              />
+              <circle cx="26" cy="26" r="16" fill="rgba(0,201,167,.08)" />
+              <path
+                d="M17 26 L23 32 L35 20"
+                stroke="#00c9a7"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <line
+                x1="26"
+                y1="4"
+                x2="26"
+                y2="8"
+                stroke="rgba(0,201,167,.4)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="26"
+                y1="44"
+                x2="26"
+                y2="48"
+                stroke="rgba(0,201,167,.4)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="4"
+                y1="26"
+                x2="8"
+                y2="26"
+                stroke="rgba(0,201,167,.4)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+              <line
+                x1="44"
+                y1="26"
+                x2="48"
+                y2="26"
+                stroke="rgba(0,201,167,.4)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <h4>Verified</h4>
+          <p>
+            This claim is directly supported by trusted global medical
+            organisations. You can confidently rely on this information.
+          </p>
+        </div>
+        <div class="v-card vm" style="animation-delay: 0.12s">
+          <div class="v-icon-wrap">
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+              <circle
+                cx="26"
+                cy="26"
+                r="24"
+                fill="rgba(240,165,0,.12)"
+                stroke="rgba(240,165,0,.35)"
+                stroke-width="1.5"
+                style="
+                  transform-origin: 26px 26px;
+                  animation: spinR 15s linear infinite;
+                "
+              />
+              <path
+                d="M26 14 L40 38 L12 38 Z"
+                fill="none"
+                stroke="#f0a500"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <line
+                x1="26"
+                y1="23"
+                x2="26"
+                y2="31"
+                stroke="#f0a500"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+              <circle cx="26" cy="35" r="1.5" fill="#f0a500" />
+            </svg>
+          </div>
+          <h4>Misleading</h4>
+          <p>
+            The claim has partial truth but is missing important context, uses
+            exaggerated language, or distorts the actual medical picture.
+          </p>
+        </div>
+        <div class="v-card vf" style="animation-delay: 0.18s">
+          <div class="v-icon-wrap">
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+              <circle
+                cx="26"
+                cy="26"
+                r="24"
+                fill="rgba(255,84,112,.12)"
+                stroke="rgba(255,84,112,.35)"
+                stroke-width="1.5"
+                style="
+                  transform-origin: 26px 26px;
+                  animation: spin 18s linear infinite;
+                "
+              />
+              <circle cx="26" cy="26" r="14" fill="rgba(255,84,112,.08)" />
+              <path
+                d="M20 20 L32 32 M32 20 L20 32"
+                stroke="#ff5470"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <h4>False</h4>
+          <p>
+            This claim directly contradicts established medical evidence and
+            could cause serious harm if acted upon without professional
+            guidance.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <footer>
+      <div class="footer-logo">
+        <svg viewBox="0 0 36 36" fill="none" style="width: 28px; height: 28px">
+          <rect
+            width="36"
+            height="36"
+            rx="9"
+            fill="rgba(0,201,167,.12)"
+            stroke="rgba(0,201,167,.3)"
+            stroke-width="1"
+          />
+          <path
+            d="M18 6 L27 10 L27 20 Q27 27 18 30 Q9 27 9 20 L9 10 Z"
+            fill="none"
+            stroke="#00c9a7"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <line
+            x1="18"
+            y1="13"
+            x2="18"
+            y2="23"
+            stroke="#00c9a7"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1="13"
+            y1="18"
+            x2="23"
+            y2="18"
+            stroke="#00c9a7"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+        <span class="logo-wordmark" style="font-size: 1.1rem"
+          >Medi<span>Vex</span></span
+        >
+      </div>
+      <svg width="200" height="32" viewBox="0 0 200 32" fill="none">
+        <path
+          d="M0 16 L30 16 L40 16 L48 4 L56 28 L62 2 L70 30 L78 16 L110 16 L118 16 L126 4 L134 28 L140 2 L148 30 L156 16 L200 16"
+          fill="none"
+          stroke="rgba(0,201,167,.45)"
+          stroke-width="1.2"
+          stroke-linecap="round"
+          stroke-dasharray="350"
+          stroke-dashoffset="350"
+          style="animation: ecgLoop 3s linear infinite"
+        />
+      </svg>
+      <p>
+        WHO · CDC · NIH · UNICEF &nbsp;·&nbsp; For informational purposes only
+      </p>
+      <div class="footer-links">
+        <a href="#">About</a><a href="#">Sources</a><a href="#">Privacy</a>
+      </div>
+    </footer>
+
+    <script>
+      const kb = [
+        {
+          kw: ["bleach", "cure", "covid"],
+          v: "false",
+          conf: 98,
+          title: "Definitively false",
+          body: "Drinking or injecting bleach does not cure COVID-19. Bleach is a corrosive chemical that causes severe internal burns and can be fatal. The WHO and CDC have explicitly warned against this dangerous claim.",
+          src: ["WHO", "CDC"],
+        },
+        {
+          kw: ["5g", "covid"],
+          v: "false",
+          conf: 99,
+          title: "Definitively false",
+          body: "COVID-19 has no connection to 5G networks. Viruses cannot travel on radio waves. Many countries without 5G experienced COVID-19 outbreaks. This has been thoroughly debunked by global health authorities.",
+          src: ["WHO", "CDC"],
+        },
+        {
+          kw: ["vitamin c", "prevent", "covid"],
+          v: "misleading",
+          conf: 72,
+          title: "Misleading — context needed",
+          body: "While Vitamin C supports immune function, there is no strong clinical evidence it prevents COVID-19. WHO recommends a balanced diet for immunity, but Vitamin C alone should not replace vaccination or other proven measures.",
+          src: ["WHO", "NIH"],
+        },
+        {
+          kw: ["covid", "vaccine", "safe", "effective"],
+          v: "verified",
+          conf: 97,
+          title: "Verified — supported by evidence",
+          body: "COVID-19 vaccines have been rigorously tested and approved by regulatory agencies globally. The WHO, CDC, and NIH confirm that authorised vaccines are safe and effective at preventing severe illness and hospitalisation.",
+          src: ["WHO", "CDC", "NIH"],
+        },
+        {
+          kw: ["vaccine", "autism"],
+          v: "false",
+          conf: 99,
+          title: "Definitively false",
+          body: "There is no link between vaccines and autism. The original 1998 study was retracted due to fraud. Dozens of large-scale studies involving millions of children have confirmed vaccines do not cause autism.",
+          src: ["WHO", "CDC", "NIH"],
+        },
+        {
+          kw: ["vaccine", "microchip"],
+          v: "false",
+          conf: 99,
+          title: "Definitively false",
+          body: "No COVID-19 vaccine or any approved vaccine contains microchips. Vaccines contain biological ingredients that trigger immune responses. This has been investigated and debunked by health authorities worldwide.",
+          src: ["WHO", "CDC"],
+        },
+        {
+          kw: ["vaccine", "dna", "change"],
+          v: "false",
+          conf: 97,
+          title: "Definitively false",
+          body: "mRNA vaccines do not alter human DNA. mRNA never enters the cell nucleus and is broken down by the body within days. This is confirmed as established molecular biology by the WHO and NIH.",
+          src: ["WHO", "NIH"],
+        },
+        {
+          kw: ["malaria", "mosquito", "parasite"],
+          v: "verified",
+          conf: 99,
+          title: "Verified — medically accurate",
+          body: "Malaria is caused by Plasmodium parasites transmitted through bites of infected female Anopheles mosquitoes. This is well-established medical fact confirmed by the WHO. Malaria is preventable and treatable.",
+          src: ["WHO", "CDC"],
+        },
+        {
+          kw: ["malaria", "hot water", "cure"],
+          v: "false",
+          conf: 98,
+          title: "Definitively false",
+          body: "Drinking hot water does not cure malaria. Malaria requires specific anti-malarial medications such as artemisinin-based combination therapies (ACTs). Relying on unproven remedies delays life-saving treatment.",
+          src: ["WHO", "CDC"],
+        },
+        {
+          kw: ["malaria", "contagious", "person"],
+          v: "false",
+          conf: 96,
+          title: "False — malaria does not spread person-to-person",
+          body: "Malaria is not contagious between humans through normal contact. It spreads only through the bite of an infected Anopheles mosquito, or rarely through blood transfusion. You cannot catch it from an infected person.",
+          src: ["WHO", "CDC"],
+        },
+        {
+          kw: ["hiv", "casual", "contact", "hug", "touch", "shake"],
+          v: "false",
+          conf: 99,
+          title: "Definitively false",
+          body: "HIV cannot be transmitted through casual everyday contact such as hugging, shaking hands, sharing food, coughing, or sneezing. HIV is only transmitted through specific bodily fluids: blood, breast milk, semen, and vaginal fluids.",
+          src: ["WHO", "UNICEF", "NIH"],
+        },
+        {
+          kw: ["hiv", "antiretroviral", "art", "control", "treatment"],
+          v: "verified",
+          conf: 97,
+          title: "Verified — supported by evidence",
+          body: "Antiretroviral therapy (ART) is highly effective at suppressing HIV to undetectable levels. People on effective ART can live long, healthy lives and cannot sexually transmit the virus to partners (U=U principle).",
+          src: ["WHO", "NIH", "UNICEF"],
+        },
+        {
+          kw: ["antibiotics", "virus", "treat", "cold", "flu"],
+          v: "false",
+          conf: 95,
+          title: "False — antibiotics do not treat viruses",
+          body: "Antibiotics fight bacteria, not viruses. Using antibiotics for viral infections like colds or flu is ineffective and contributes to antibiotic resistance — a growing global health threat identified by WHO.",
+          src: ["WHO", "NIH"],
+        },
+        {
+          kw: ["hand wash", "soap", "prevent", "spread"],
+          v: "verified",
+          conf: 98,
+          title: "Verified — effective preventive measure",
+          body: "Regular handwashing with soap and water is one of the most effective ways to prevent the spread of many infectious diseases. WHO and CDC both strongly recommend it as a cornerstone of public health hygiene.",
+          src: ["WHO", "CDC", "UNICEF"],
+        },
+      ];
+      function norm(t) {
+        return t.toLowerCase().replace(/[''',.\-!?]/g, " ");
+      }
+      function score(input, kw) {
+        const n = norm(input);
+        return kw.filter((k) => n.includes(k)).length;
+      }
+      function match(input) {
+        let best = null,
+          top = 0;
+        for (const e of kb) {
+          const s = score(input, e.kw);
+          if (s > top) {
+            top = s;
+            best = e;
+          }
+        }
+        return top >= 2 ? best : null;
+      }
+      function fill(btn) {
+        const ta = document.getElementById("claim-input");
+        ta.value = btn.textContent;
+        updateCount();
+        ta.focus();
+      }
+      function updateCount() {
+        document.getElementById("char-count").textContent =
+          document.getElementById("claim-input").value.length + " / 800";
+      }
+      document
+        .getElementById("claim-input")
+        .addEventListener("input", updateCount);
+      const icons = {
+        verified: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="rgba(0,201,167,.15)" stroke="rgba(0,201,167,.4)" stroke-width="1.2"/><path d="M8 14 L12 18 L20 10" stroke="#00c9a7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        misleading: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="rgba(240,165,0,.15)" stroke="rgba(240,165,0,.4)" stroke-width="1.2"/><path d="M14 7 L22 21 L6 21 Z" fill="none" stroke="#f0a500" stroke-width="1.8" stroke-linejoin="round"/><line x1="14" y1="13" x2="14" y2="18" stroke="#f0a500" stroke-width="2" stroke-linecap="round"/><circle cx="14" cy="20" r="1" fill="#f0a500"/></svg>`,
+        false: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" fill="rgba(255,84,112,.15)" stroke="rgba(255,84,112,.4)" stroke-width="1.2"/><path d="M9 9 L19 19 M19 9 L9 19" stroke="#ff5470" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      };
+      const labels = {
+        verified: "Verified",
+        misleading: "Misleading",
+        false: "False",
+      };
+      const fallback = {
+        v: "misleading",
+        conf: 50,
+        title: "Unable to determine",
+        body: "MediVex could not find a strong match in its current database. This does not mean the claim is true or false. Please consult a qualified healthcare professional or visit WHO.int for authoritative information.",
+        src: ["WHO"],
+      };
+      function verify() {
+        const input = document.getElementById("claim-input").value.trim();
+        if (!input) {
+          const ta = document.getElementById("claim-input");
+          ta.style.borderColor = "rgba(255,84,112,.5)";
+          setTimeout(() => (ta.style.borderColor = ""), 900);
+          return;
+        }
+        document.getElementById("result-section").style.display = "none";
+        const loader = document.getElementById("loader");
+        loader.style.display = "flex";
+        const steps = [
+          "Scanning keyword database…",
+          "Cross-referencing WHO guidelines…",
+          "Checking CDC & NIH records…",
+          "Calculating confidence score…",
+          "Generating verdict…",
+        ];
+        let i = 0;
+        const stepEl = document.getElementById("loader-step");
+        const iv = setInterval(() => {
+          if (++i < steps.length) stepEl.textContent = steps[i];
+        }, 370);
+        setTimeout(() => {
+          clearInterval(iv);
+          loader.style.display = "none";
+          renderResult(match(input) || { ...fallback });
+        }, 1950);
+      }
+      function renderResult(d) {
+        const sec = document.getElementById("result-section");
+        const v = d.v,
+          conf = d.conf,
+          body = d.body,
+          srcs = d.src;
+        sec.innerHTML = `<div class="result-card ${v}"><div class="r-top"><div class="r-icon">${icons[v]}</div><div class="r-hed"><h3>${labels[v]} — ${d.title}</h3><div class="r-meta">Confidence: ${conf}% &nbsp;·&nbsp; ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</div></div></div><div class="conf-bar-wrap"><div class="conf-labels"><span>Confidence score</span><span>${conf}%</span></div><div class="bar-track"><div class="bar-fill" id="bfill" style="width:0%"></div></div></div><div class="r-body">${body}</div><div class="r-sources"><span class="src-label">Sources</span>${srcs.map((s) => `<span class="src-tag"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#00c9a7" stroke-width="1.2"/><line x1="7" y1="4" x2="7" y2="7" stroke="#00c9a7" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="9.5" r=".8" fill="#00c9a7"/></svg>${s}</span>`).join("")}</div></div>`;
+        sec.style.display = "block";
+        sec.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        setTimeout(
+          () => (document.getElementById("bfill").style.width = conf + "%"),
+          120,
+        );
+      }
+    </script>
+  </body>
+</html>
