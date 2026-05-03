@@ -1,24 +1,20 @@
 import React from "react";
-import './Landing.css';
+import "./Landing.css";
 function LandingPage() {
   return (
     <>
       <nav className="navbar">
         <h1>AgriHash</h1>
         <ul className="nav-links">
-          <li>
-            <a href="#home">How it works</a>
-          </li>
-          <li>
-            <a href="#about">Who it's for</a>
-          </li>
-          <li>
-            <a href="#contact">Why AgriHash</a>
-          </li>
+          <a href="#home">How it works</a>
+
+          <a href="#about">Who it's for</a>
+
+          <a href="#contact">Why AgriHash</a>
         </ul>
       </nav>
 
-      <div className="hero-section">
+      <div id="home">
         <h3> Bringing trust to every step of your food supply chain</h3>
         <p>
           AgriHash records every handoff, payment, and certification permanently
@@ -69,7 +65,7 @@ function LandingPage() {
         </div>
       </div>
 
-      <div className="who-section">
+      <div id="about">
         <div className=" farmers">
           <h3>Farmers</h3>
           <p>Get paid fairly and prove your produce is genuine</p>
@@ -103,7 +99,7 @@ function LandingPage() {
           <p>Know exactly where your food came from</p>
         </div>
       </div>
-      <div className="why">
+      <div id="contact">
         <div className="why-section">
           <ol>
             <li>
