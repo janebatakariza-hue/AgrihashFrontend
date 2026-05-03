@@ -71,7 +71,7 @@ p {
 .retailers,
 .consumers,
 .why-section,
-.calltoaction,
+
 .transporters,
 .inspectors,
 .auditors {
@@ -110,4 +110,8 @@ footer {
 
   align-items: right;
   justify-content: space-between;
+}
+.footpar {
+  margin-left: 70%;
+  align-items: center;
 }

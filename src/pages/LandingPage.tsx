@@ -131,9 +131,13 @@ function LandingPage() {
       </div>
       <footer className="footer">
         <h3>AgriHash</h3>
-        <p>Contact</p>
-        <p>Docs</p>
-        <p>Privacy Policy</p>
+        <div className="footpar" style={{ display: "flex", gap: "20px" , flexWrap:"wrap",
+          justifyContent:"center"
+        }}>
+          <p>Contact</p>
+          <p>Docs</p>
+          <p>Privacy Policy</p>
+        </div>
       </footer>
     </>
   );
