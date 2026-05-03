@@ -1,6 +1,7 @@
 import arrow_emoji from "../assets/arrow_emoji.png";
 import wallet_emoji from "../assets/wallet_emoji.png";
 import "../Agri.css";
+import LandingPage from "./LandingPage";
 export default function Home() {
   return (
     <div id="home">

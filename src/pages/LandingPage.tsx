@@ -1,4 +1,6 @@
-export function LandingPage() {
+import React from "react";
+import "./LandingPage.css";
+function LandingPage() {
   return (
     <>
       <nav className="navbar">
@@ -140,3 +142,4 @@ export function LandingPage() {
     </>
   );
 }
+export default LandingPage;
