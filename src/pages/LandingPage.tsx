@@ -2,7 +2,7 @@ import React from "react";
 import "./Landing.css";
 function LandingPage() {
   return (
-    <>
+    <div className="landing-page">
       <nav className="navbar">
         <h1>AgriHash</h1>
         <ul className="nav-links">
@@ -23,6 +23,7 @@ function LandingPage() {
         </p>
         <button>Get Started</button>
       </div>
+      <h3 className="problemp">The Problems</h3>
       <div className="problems-section">
         <div className="foodfraud">
           <h3>Food fraud is everywhere</h3>
@@ -45,9 +46,8 @@ function LandingPage() {
           </p>
         </div>
       </div>
-
+      <h3 className="howp">How AgriHash works </h3>
       <div className="solution-section">
-        <h3>How AgriHash works </h3>
         <div className="step1">
           <h3>Step 1</h3>
           <p>Create your account and pick your role</p>
@@ -65,10 +65,8 @@ function LandingPage() {
           <p>Any one can verify where a product came from instantly</p>
         </div>
       </div>
-
+      <h3 className="whop">Who is AgriHash for? </h3>
       <div id="about">
-        <h3>Who is AgriHash for? </h3>
-        <br />
         <div className=" farmers">
           <h3>Farmers</h3>
           <p>Get paid fairly and prove your produce is genuine</p>
@@ -102,6 +100,7 @@ function LandingPage() {
           <p>Know exactly where your food came from</p>
         </div>
       </div>
+      <h3 className="promisep">What we promise</h3>
       <div id="contact">
         <div className="why-section">
           <ol>
@@ -134,6 +133,7 @@ function LandingPage() {
       </div>
       <footer className="footer">
         <h3>AgriHash</h3>
+        
         <div
           className="footpar"
           style={{
@@ -148,7 +148,7 @@ function LandingPage() {
           <p>Privacy Policy</p>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 export default LandingPage;
