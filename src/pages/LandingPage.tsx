@@ -25,25 +25,27 @@ function LandingPage() {
       </div>
       <h3 className="problemp">The Problems</h3>
       <div className="problems-section">
-        <div className="foodfraud">
-          <h3>Food fraud is everywhere</h3>
-          <p>
-            Fake certifications and mislabeled produce cost the industry
-            billions every year.
-          </p>
-        </div>
-        <div className="accountability">
-          <h3>No one is accountable</h3>
-          <p>
-            {" "}
-            When something goes wrong, no one can prove who is responsible.
-          </p>
-        </div>
-        <div className="paymentdisputes">
-          <h3>Payments cause disputes</h3>
-          <p>
-            Farmers wait months to get paid , with no guarantee of fairness.
-          </p>
+        <div className="card-stack">
+          <div className="foodfraud card">
+            <h3>Food fraud is everywhere</h3>
+            <p>
+              Fake certifications and mislabeled produce cost the industry
+              billions every year.
+            </p>
+          </div>
+          <div className="accountability card">
+            <h3>No one is accountable</h3>
+            <p>
+              {" "}
+              When something goes wrong, no one can prove who is responsible.
+            </p>
+          </div>
+          <div className="paymentdisputes card">
+            <h3>Payments cause disputes</h3>
+            <p>
+              Farmers wait months to get paid , with no guarantee of fairness.
+            </p>
+          </div>
         </div>
       </div>
       <h3 className="howp">How AgriHash works </h3>
@@ -133,7 +135,7 @@ function LandingPage() {
       </div>
       <footer className="footer">
         <h3>AgriHash</h3>
-        
+
         <div
           className="footpar"
           style={{
