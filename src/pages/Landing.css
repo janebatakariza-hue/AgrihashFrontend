@@ -2,8 +2,7 @@
 .problems-section,
 .solution-section,
 #about,
-#contact,
-.calltoaction {
+#contact {
   background-color: #f5f0e8;
   padding: 60px 40px;
 }
@@ -71,7 +70,6 @@ p {
 .retailers,
 .consumers,
 .why-section,
-
 .transporters,
 .inspectors,
 .auditors {
@@ -80,7 +78,7 @@ p {
   border-radius: 20px;
   padding: 24px;
 }
-.problems-section,
+
 .solution-section,
 #about {
   display: grid;
@@ -114,4 +112,28 @@ footer {
 .footpar {
   margin-left: 70%;
   align-items: center;
+}
+.footer {
+  border-top: 1px solid #9bce44;
+}
+.calltoaction {
+  background-color: #f5f0e8;
+  padding: 60px 40px;
+  text-align: center;
+}
+.calltoaction button {
+  margin: 20px;
+}
+#home button {
+  margin: 20px;
+}
+.problems-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 5px;
+}
+
+.why-section {
+  text-align: left;
+  padding: 24px 40px;
 }
