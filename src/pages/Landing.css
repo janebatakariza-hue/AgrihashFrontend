@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 #home,
 .problems-section,
 .solution-section,
@@ -6,6 +11,18 @@
   background-color: #f5f0e8;
   padding: 60px 40px;
 }
+#home,
+.problems-section,
+.solution-section,
+#about,
+#contact,
+.calltoaction,
+.navbar,
+footer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -78,12 +95,19 @@ p {
   border-radius: 20px;
   padding: 24px;
 }
+body,
+html,
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 
 .solution-section,
 #about {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 80px;
 }
 footer {
   text-align: center;

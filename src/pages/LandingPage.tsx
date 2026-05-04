@@ -47,6 +47,7 @@ function LandingPage() {
       </div>
 
       <div className="solution-section">
+        <h3>How AgriHash works </h3>
         <div className="step1">
           <h3>Step 1</h3>
           <p>Create your account and pick your role</p>
@@ -66,6 +67,8 @@ function LandingPage() {
       </div>
 
       <div id="about">
+        <h3>Who is AgriHash for? </h3>
+        <br />
         <div className=" farmers">
           <h3>Farmers</h3>
           <p>Get paid fairly and prove your produce is genuine</p>
@@ -131,9 +134,15 @@ function LandingPage() {
       </div>
       <footer className="footer">
         <h3>AgriHash</h3>
-        <div className="footpar" style={{ display: "flex", gap: "20px" , flexWrap:"wrap",
-          justifyContent:"center"
-        }}>
+        <div
+          className="footpar"
+          style={{
+            display: "flex",
+            gap: "20px",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
           <p>Contact</p>
           <p>Docs</p>
           <p>Privacy Policy</p>
