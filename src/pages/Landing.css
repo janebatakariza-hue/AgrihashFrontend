@@ -4,9 +4,7 @@
   padding: 0;
   box-sizing: border-box;
 }
-#home {
-  padding-top: 90px;
-}
+
 body,
 .landing-page {
   background-image:
@@ -24,6 +22,9 @@ body,
 #contact {
   background-color: transparent;
   padding: 60px 40px;
+}
+#home {
+  padding-top: 90px;
 }
 #home,
 .problems-section,
@@ -187,4 +188,24 @@ footer {
 .whop,
 .promisep {
   background-color: transparent;
+}
+.foodfraud:hover,
+.accountability:hover,
+.paymentdisputes:hover,
+.step1:hover,
+.step2:hover,
+.step3:hover,
+.step4:hover,
+.farmers:hover,
+.processors:hover,
+.warehouses:hover,
+.retailers:hover,
+.consumers:hover,
+.why-section:hover,
+.transporters:hover,
+.inspectors:hover,
+.auditors:hover {
+  transform: translateX(5px);
+  transition: transform 0.3s ease;
+  cursor: pointer;
 }
