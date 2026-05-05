@@ -1,6 +1,21 @@
-import React from "react";
 import "./Landing.css";
+import img1 from "../assets/img1.jpg";
+import img2 from "../assets/img2.jpg";
+import img3 from "../assets/img3.jpg";
+import React, { useState, useEffect } from "react";
+
 function LandingPage() {
+  const images: string[] = [img1, img2, img3];
+  const [current, setCurrent] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+  const prev = () =>
+    setCurrent((prev) => (prev - 1 + images.length) % images.length);
+  const next = () => setCurrent((prev) => (prev + 1) % images.length);
   return (
     <div className="landing-page">
       <nav className="navbar">
@@ -15,6 +30,26 @@ function LandingPage() {
       </nav>
 
       <div id="home">
+        <div className="slideshow">
+          <button className="slide-btn" onClick={prev}>
+            ‹
+          </button>
+          <img src={images[current]} className="slide-img" alt="slide" />
+          <button className="slide-btn" onClick={next}>
+            ›
+          </button>
+
+          {/* dots indicator */}
+          <div className="dots">
+            {images.map((_, i) => (
+              <span
+                key={i}
+                className={i === current ? "dot active" : "dot"}
+                onClick={() => setCurrent(i)}
+              />
+            ))}
+          </div>
+        </div>
         <h3> Bringing trust to every step of your food supply chain</h3>
         <p>
           AgriHash records every handoff, payment, and certification permanently
