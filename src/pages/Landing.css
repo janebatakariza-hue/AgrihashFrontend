@@ -248,6 +248,7 @@ footer {
   justify-content: center;
   margin: 30px auto;
   width: 80%;
+  padding: 30px;
 }
 
 .slide-img {
@@ -282,7 +283,6 @@ footer {
   background: rgba(0, 0, 0, 0.7);
 }
 
-/* dots */
 .dots {
   position: absolute;
   bottom: 14px;
