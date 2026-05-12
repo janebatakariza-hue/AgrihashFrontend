@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 :root {
-  --green-dark: #2d5a3d;
+  --green-dark: #1c3829;
   --green-light: #e8f0eb;
   --text-dark: #111;
   --text-muted: #666;
@@ -12,7 +12,7 @@
 }
 .page {
   min-height: 100vh;
-  background-color: var(--green-light);
+  background-color: var(--green-dark);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,4 +26,134 @@
   max-width: 700px;
   border-radius: 16px;
   padding: 32px;
+}
+.navbar {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--white);
+  font-weight: 600;
+  font-size: 18px;
+}
+.wallet-btn {
+  background: transparent;
+  border: 1px solid var(--white);
+  color: var(--white);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.role-header h1 {
+  color: var(--text-dark);
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.role-header p {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-top: 8px;
+}
+.stepper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.stepper p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.step-tabs {
+  display: flex;
+  width: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.step-tabs button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.step-tabs button.active {
+  background-color: var(--green-dark);
+  color: var(--white);
+  border-radius: 30px;
+}
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+.role-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  gap: 8px;
+}
+
+.role-card h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.role-card p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.role-card.selected {
+  border: 2px solid var(--green-dark);
+  background-color: var(--green-light);
+}
+.role-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+.continue-btn {
+  width: 100%;
+  padding: 16px;
+  background-color: var(--green-dark);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.continue-btn:hover {
+  opacity: 0.9;
+}
+.role-footer p {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
 }
