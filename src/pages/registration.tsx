@@ -1,20 +1,77 @@
-import './Registration.css';
-function Registration(){
-return (
-    <>
-    <div className="role">
-<h1 className="register">Register to Agrihash</h1>
-<p className="first_two">Farming enterprise</p>
-<p className="first_two">Agro-Processing</p>
-<p className="second_two">Warehouse</p>
-<p className="second_two">Transport Company</p>
-<p className="third_two">Inspector</p>
-<p className="third_two">Auditor</p>
-<p className="fourth_two">Retailer</p>
-<button>Continue</button>
+import "./Registration.css";
+function Registration() {
+  return (
+    <div className="page">
+      <nav className="navbar">
+        <div className="nav-logo">
+          <img src={logo} alt="agrihash logo" />
+          <span>Agrihash</span>
+        </div>
+        <div className="nav-actions">
+          <button className="wallet-btn">0x1234...5678</button>
+        </div>
+      </nav>
+      <div className="stepper">
+        <p>Step 1 of 3</p>
+        <div className="step-tabs">
+          <button className="active">Profile</button>
+          <button>Role details</button>
+          <button>Documents</button>
+        </div>
+      </div>
 
+      <div className="role">
+        <div className="role-header">
+          <h1>What best describes you?</h1>
+          <p>Your role determines what you can do on the platform.</p>
+        </div>
+        <div className="role-grid">
+          <div className="role-card selected">
+            <span className="role-icon">👩‍🌾</span>
+            <h3>Farming Enterprise</h3>
+            <p>Grow and register crop batches.</p>
+          </div>
+          <div className="role-card">
+            <span className="role-icon">👩‍🌾</span>
+            <h3>Agro-Processing</h3>
+            <p>Buy raw produce,process and resell</p>
+          </div>
+          <div className="role-card">
+            <span className="role-icon">👩‍🌾</span>
+            <h3>Warehouse Enterprise</h3>
+            <p>Store batches,issue custody receipts</p>
+          </div>
+          <div className="role-card">
+            <span className="role-icon">👩‍🌾</span>
+            <h3>Transport Company</h3>
+            <p>Transport ready products to the market</p>
+          </div>
+          <div className="role-card selected">
+            <span className="role-icon">👩‍🌾</span>
+            <h3>Inspector</h3>
+            <p>Certify and grade batches</p>
+          </div>
+          <div className="role-card selected">
+            <span className="role-icon">👩‍🌾</span>
+            <h3>Auditor</h3>
+            <p>Audit full supply chains</p>
+          </div>
+          <div className="role-card selected">
+            <span className="role-icon">👩‍🌾</span>
+            <h3>Retailer</h3>
+            <p>Buy from marketplace</p>
+          </div>
+        </div>
+
+        <div className="role-footer">
+          <button className="continue-btn">Continue</button>
+          <p>
+            End consumers need no account. The traceability portal is fully
+            public.
+          </p>
+        </div>
+      </div>
     </div>
-    </>
-)
+  );
 }
 export default Registration;
