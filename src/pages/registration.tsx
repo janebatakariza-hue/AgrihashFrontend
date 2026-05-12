@@ -4,7 +4,7 @@ function Registration() {
     <div className="page">
       <nav className="navbar">
         <div className="nav-logo">
-          <img src={logo} alt="agrihash logo" />
+          {/* <img src={logo} alt="agrihash logo" /> */}
           <span>Agrihash</span>
         </div>
         <div className="nav-actions">
