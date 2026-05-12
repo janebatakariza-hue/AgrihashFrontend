@@ -11,66 +11,68 @@ function Registration() {
           <button className="wallet-btn">0x1234...5678</button>
         </div>
       </nav>
-      <div className="stepper">
-        <p>Step 1 of 3</p>
-        <div className="step-tabs">
-          <button className="active">Profile</button>
-          <button>Role details</button>
-          <button>Documents</button>
-        </div>
-      </div>
-
-      <div className="role">
-        <div className="role-header">
-          <h1>What best describes you?</h1>
-          <p>Your role determines what you can do on the platform.</p>
-        </div>
-        <div className="role-grid">
-          <div className="role-card selected">
-            <span className="role-icon">👩‍🌾</span>
-            <h3>Farming Enterprise</h3>
-            <p>Grow and register crop batches.</p>
-          </div>
-          <div className="role-card">
-            <span className="role-icon">👩‍🌾</span>
-            <h3>Agro-Processing</h3>
-            <p>Buy raw produce,process and resell</p>
-          </div>
-          <div className="role-card">
-            <span className="role-icon">👩‍🌾</span>
-            <h3>Warehouse Enterprise</h3>
-            <p>Store batches,issue custody receipts</p>
-          </div>
-          <div className="role-card">
-            <span className="role-icon">👩‍🌾</span>
-            <h3>Transport Company</h3>
-            <p>Transport ready products to the market</p>
-          </div>
-          <div className="role-card selected">
-            <span className="role-icon">👩‍🌾</span>
-            <h3>Inspector</h3>
-            <p>Certify and grade batches</p>
-          </div>
-          <div className="role-card selected">
-            <span className="role-icon">👩‍🌾</span>
-            <h3>Auditor</h3>
-            <p>Audit full supply chains</p>
-          </div>
-          <div className="role-card selected">
-            <span className="role-icon">👩‍🌾</span>
-            <h3>Retailer</h3>
-            <p>Buy from marketplace</p>
+      <main className="main-card">
+        <div className="stepper">
+          <p>Step 1 of 3</p>
+          <div className="step-tabs">
+            <button className="active">Profile</button>
+            <button>Role details</button>
+            <button>Documents</button>
           </div>
         </div>
 
-        <div className="role-footer">
-          <button className="continue-btn">Continue</button>
-          <p>
-            End consumers need no account. The traceability portal is fully
-            public.
-          </p>
+        <div className="role">
+          <div className="role-header">
+            <h1>What best describes you?</h1>
+            <p>Your role determines what you can do on the platform.</p>
+          </div>
+          <div className="role-grid">
+            <div className="role-card selected">
+              <span className="role-icon">👩‍🌾</span>
+              <h3>Farming Enterprise</h3>
+              <p>Grow and register crop batches.</p>
+            </div>
+            <div className="role-card">
+              <span className="role-icon">👩‍🌾</span>
+              <h3>Agro-Processing</h3>
+              <p>Buy raw produce,process and resell</p>
+            </div>
+            <div className="role-card">
+              <span className="role-icon">👩‍🌾</span>
+              <h3>Warehouse Enterprise</h3>
+              <p>Store batches,issue custody receipts</p>
+            </div>
+            <div className="role-card">
+              <span className="role-icon">👩‍🌾</span>
+              <h3>Transport Company</h3>
+              <p>Transport ready products to the market</p>
+            </div>
+            <div className="role-card">
+              <span className="role-icon">👩‍🌾</span>
+              <h3>Inspector</h3>
+              <p>Certify and grade batches</p>
+            </div>
+            <div className="role-card">
+              <span className="role-icon">👩‍🌾</span>
+              <h3>Auditor</h3>
+              <p>Audit full supply chains</p>
+            </div>
+            <div className="role-card">
+              <span className="role-icon">👩‍🌾</span>
+              <h3>Retailer</h3>
+              <p>Buy from marketplace</p>
+            </div>
+          </div>
+
+          <div className="role-footer">
+            <button className="continue-btn">Continue</button>
+            <p>
+              End consumers need no account. The traceability portal is fully
+              public.
+            </p>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
