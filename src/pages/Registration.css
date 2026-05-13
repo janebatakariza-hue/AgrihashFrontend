@@ -135,7 +135,8 @@ body {
   font-size: 13px;
   color: var(--text-muted);
 }
-.role-card.selected {
+
+.role-card:hover {
   border: 2px solid var(--green-dark);
   background-color: var(--green-light);
 }
