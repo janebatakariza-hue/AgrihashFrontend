@@ -1,3 +1,4 @@
+import { Sprout } from 'lucide-react'
 import "./Registration.css";
 function Registration() {
   return (

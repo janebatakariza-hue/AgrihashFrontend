@@ -101,7 +101,9 @@ body {
   font-size: 14px;
   color: var(--text-muted);
 }
-
+.step-tabs button:hover {
+  background-color: var(--green-light);
+}
 .step-tabs button.active {
   background-color: var(--green-dark);
   color: var(--white);
