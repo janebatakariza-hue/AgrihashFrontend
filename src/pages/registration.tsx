@@ -1,4 +1,12 @@
-import { Sprout } from 'lucide-react'
+import {
+  Sprout,
+  Factory,
+  Warehouse,
+  Truck,
+  ClipboardCheck,
+  Search,
+  Store,
+} from "lucide-react";
 import "./Registration.css";
 function Registration() {
   return (
@@ -29,37 +37,37 @@ function Registration() {
           </div>
           <div className="role-grid">
             <div className="role-card selected">
-              <span className="role-icon">👩‍🌾</span>
+              <Sprout size={32} color="#2d5a3d" />
               <h3>Farming Enterprise</h3>
               <p>Grow and register crop batches.</p>
             </div>
             <div className="role-card">
-              <span className="role-icon">👩‍🌾</span>
+              <Factory size={32} color="#1c3829" />
               <h3>Agro-Processing</h3>
               <p>Buy raw produce,process and resell</p>
             </div>
             <div className="role-card">
-              <span className="role-icon">👩‍🌾</span>
+              <Warehouse size={32} color="#1c3829" />
               <h3>Warehouse Enterprise</h3>
               <p>Store batches,issue custody receipts</p>
             </div>
             <div className="role-card">
-              <span className="role-icon">👩‍🌾</span>
+              <Truck size={32} color="#1c3829" />
               <h3>Transport Company</h3>
               <p>Transport ready products to the market</p>
             </div>
             <div className="role-card">
-              <span className="role-icon">👩‍🌾</span>
+              <ClipboardCheck size={32} color="#1c3829" />
               <h3>Inspector</h3>
               <p>Certify and grade batches</p>
             </div>
             <div className="role-card">
-              <span className="role-icon">👩‍🌾</span>
+              <Search size={32} color="#1c3829" />
               <h3>Auditor</h3>
               <p>Audit full supply chains</p>
             </div>
             <div className="role-card">
-              <span className="role-icon">👩‍🌾</span>
+              <Store size={32} color="#1c3829" />
               <h3>Retailer</h3>
               <p>Buy from marketplace</p>
             </div>

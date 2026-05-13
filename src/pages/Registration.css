@@ -139,8 +139,9 @@ body {
 }
 
 .role-card:hover {
-  border: 2px solid var(--green-dark);
+  border: 0.5px solid var(--green-dark);
   background-color: var(--green-light);
+  box-shadow: 0 4px 12px rgba(29, 56, 41, 0.15);
 }
 .role-footer {
   display: flex;
